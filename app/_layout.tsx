@@ -1,29 +1,60 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { View, Text, Button } from "react-native";
+import React from "react";
+import { Stack, router } from "expo-router";
+import Drawer from "expo-router/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  DrawerContentComponentProps,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
+function CustomDrawerContent(props: DrawerContentComponentProps) {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  );
+}
+
+export const unstable_settings = {
+  initialRouteName: "login",
+};
+
+export default function _layout() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* <Drawer
+        drawerContent={CustomDrawerContent}
+        screenOptions={{
+          drawerActiveTintColor: "red",
+          drawerHideStatusBarOnOpen: true,
+        }}
+      >
+        <Drawer.Screen
+          name="login"
+          options={{
+            drawerLabel: "Iniciar Sesión",
+            title: "Inicar",
+          }}
+        />
+        <Drawer.Screen
+          name="index"
+          options={{
+            drawerItemStyle: {
+              display: "none",
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="(app)/index"
+          options={{
+            drawerItemStyle: {
+              display: "none",
+            },
+          }}
+        />
+      </Drawer> */}
+    </GestureHandlerRootView>
   );
 }
