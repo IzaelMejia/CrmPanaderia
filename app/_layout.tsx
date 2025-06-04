@@ -8,53 +8,62 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import { Provider } from "react-redux";
+import { store } from "@/src/presentation/store/store";
 
-function CustomDrawerContent(props: DrawerContentComponentProps) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
+// function CustomDrawerContent(props: DrawerContentComponentProps) {
+//   return (
+//     <DrawerContentScrollView {...props}>
+//       <DrawerItemList {...props} />
+//     </DrawerContentScrollView>
+//   );
+// }
 
-export const unstable_settings = {
-  initialRouteName: "login",
-};
+// export const unstable_settings = {
+//   initialRouteName: "login",
+// };
 
 export default function _layout() {
+  
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* <Drawer
-        drawerContent={CustomDrawerContent}
-        screenOptions={{
-          drawerActiveTintColor: "red",
-          drawerHideStatusBarOnOpen: true,
-        }}
-      >
-        <Drawer.Screen
-          name="login"
-          options={{
-            drawerLabel: "Iniciar Sesión",
-            title: "Inicar",
-          }}
-        />
-        <Drawer.Screen
-          name="index"
-          options={{
-            drawerItemStyle: {
-              display: "none",
-            },
-          }}
-        />
-        <Drawer.Screen
-          name="(app)/index"
-          options={{
-            drawerItemStyle: {
-              display: "none",
-            },
-          }}
-        />
-      </Drawer> */}
-    </GestureHandlerRootView>
+    // <GestureHandlerRootView style={{ flex: 1 }}>
+    //   <Drawer
+    //     drawerContent={CustomDrawerContent}
+    //     screenOptions={{
+    //       drawerActiveTintColor: "red",
+    //       drawerHideStatusBarOnOpen: true,
+    //     }}
+    //   >
+    //     <Drawer.Screen
+    //       name="login"
+    //       options={{
+    //         drawerLabel: "Iniciar Sesión",
+    //         title: "Inicar",
+    //       }}
+    //     />
+    //     <Drawer.Screen
+    //       name="index"
+    //       options={{
+    //         drawerItemStyle: {
+    //           display: "none",
+    //         },
+    //       }}
+    //     />
+    //     <Drawer.Screen
+    //       name="(app)/index"
+    //       options={{
+    //         drawerItemStyle: {
+    //           display: "none",
+    //         },
+    //       }}
+    //     />
+    //   </Drawer>
+    // </GestureHandlerRootView>
+    <Provider store={store}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+               {/* <AuthContext.Provider value={{}}></AuthContext.Provider> */}
+
+      </GestureHandlerRootView>
+    </Provider>
   );
 }

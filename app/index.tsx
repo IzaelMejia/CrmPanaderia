@@ -1,18 +1,15 @@
-import { Redirect } from "expo-router";
-import { Provider, useSelector } from "react-redux";
+// import { Redirect } from "expo-router";
+import { Provider } from "react-redux";
 import { store } from "../src/presentation/store/store";
 import { createContext } from "react";
+import { Text, View } from "react-native";
+import { useAppSelector } from "@/src/presentation/store/hooks/reduxActions";
 export default function Start() {
-  // const AuthContext = createContext({});
-  // const { logged } = useSelector((state) =>  state.auth);
-
+  
   return (
-    <Provider store={store}>
-      <>
-
-      </>
-      {/* <AuthContext.Provider value={{}}></AuthContext.Provider> */}
-    </Provider>
+      <View style={{backgroundColor: "red", flex: 1}}>
+        <Text>Hola</Text>
+      </View>
   );
   // <Redirect href="/login" />;
 }

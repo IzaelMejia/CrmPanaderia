@@ -1,1 +1,1 @@
-<!-- Aquí vienen las entidades   -->
+<!-- Definen lo que EL DOMINIO NECESITA -->
