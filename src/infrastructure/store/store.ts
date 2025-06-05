@@ -3,7 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import { rootReducer, RootState } from "./rootReducers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { initMessageListener } from "redux-state-sync";
+// import { initMessageListener } from "redux-state-sync";
 
 
 const persistConfig = {
@@ -23,7 +23,7 @@ export const store = configureStore({
     })
 });
 
-initMessageListener(store);
+// initMessageListener(store);
 export const persistor = persistStore(store);
 export type AppDispatch = typeof store.dispatch;
 

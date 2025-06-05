@@ -1,0 +1,1 @@
+<!-- componentes que se conectan a la store y muestran/interactúan. -->
