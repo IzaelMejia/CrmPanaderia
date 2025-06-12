@@ -1,19 +1,15 @@
-// import { Redirect } from "expo-router";
+import { Redirect } from "expo-router";
 import { Provider } from "react-redux";
 import { store } from "../src/infrastructure/store/store";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import { Text, View } from "react-native";
 import { useAppSelector } from "@/src/infrastructure/store/hooks/reduxActions";
-export default function Start() {
-    // const AuthContext = createContext({});
+import { useRouter } from "expo-router";
 
-  const { logged } = useAppSelector((state) => state.auth);
-  console.log("logged", logged);
-  return (
-    <View>
-      <Text>Hola</Text>
-    </View>
-    
-  );
-  // <Redirect href="/login" />;
+export default function Index() {
+  // const logged = useAppSelector((state) => state.auth.logged);
+  // console.log("logged", logged);
+  const logged = false;
+
+  return logged ? <Redirect href="/home" /> : <Redirect href="/login" />;
 }

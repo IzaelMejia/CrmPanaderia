@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useAppSelector } from "@/src/infrastructure/store/hooks/reduxActions";
 
-const Login = () => {
+export const HomeScreen = () => {
+  
   return (
     <View>
-      <Text>login</Text>
+      <Text>HomeScreen</Text>
     </View>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({});

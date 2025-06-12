@@ -15,12 +15,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   );
 }
 
-export const unstable_settings = {
-  initialRouteName: "login",
-};
-
 export default function _layout() {
-    
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -30,16 +25,14 @@ export default function _layout() {
           drawerHideStatusBarOnOpen: true,
         }}
       >
-        {/* <Drawer.Screen
-          name="login"
+        <Drawer.Screen
+          name="home"
           options={{
-            drawerLabel: "Iniciar Sesión",
+            drawerLabel: "Home",
             title: "Inicar",
           }}
-        /> */}
-      
+        />
       </Drawer>
     </GestureHandlerRootView>
-    
   );
 }
