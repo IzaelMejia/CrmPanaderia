@@ -4,6 +4,8 @@ import { store } from "@/src/infrastructure/store/store";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import "../global.css"
+
 export default function _layout() {
   return (
     <Provider store={store}>
