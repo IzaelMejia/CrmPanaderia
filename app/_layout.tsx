@@ -1,9 +1,10 @@
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
-import { store } from "@/src/infrastructure/store/store";
-import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native";
+
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+
+import { store } from "@/src/infrastructure/store/store";
 import "../global.css"
 
 export default function _layout() {
