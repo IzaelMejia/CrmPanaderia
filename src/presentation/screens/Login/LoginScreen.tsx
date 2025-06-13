@@ -15,11 +15,10 @@ import { Image } from "expo-image";
 import imgInicio from "@/assets/images/fondoPantalla.jpg";
 import { Colors } from "@/constants/Colors";
 import { globalStyles } from "@/globals/global-styles";
-import { InputAlert } from "../../components/InputAlert";
+import { InputAlert } from "../../components/Alert/InputAlert";
 
 export const LoginScreen = () => {
   const [activeInput, setActiveInput] = useState<string | null>(null);
-  console.log("activeInput", activeInput);
 
   return (
     <View className="bg-white flex flex-row flex-1">

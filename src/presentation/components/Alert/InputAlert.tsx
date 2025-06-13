@@ -1,18 +1,12 @@
-import React, { ReactNode } from "react";
 import { View, Text } from "react-native";
 import { CircleAlert, TriangleAlert } from "lucide-react-native";
-
-type AlertVariant = "error" | "warning";
-
-interface AlertProps {
-  children: ReactNode; // contenido de tu mensaje
-  variant?: AlertVariant; // tipo de alerta (colores, icono)
-}
+import { AlertProps } from "./InputAlert.types";
 
 const icons = {
   error: <CircleAlert size={20} color="#B91C1C" />,
   warning: <TriangleAlert size={20} color="#92400E" />,
 };
+
 export const InputAlert: React.FC<AlertProps> = ({
   variant = "error",
   children,
