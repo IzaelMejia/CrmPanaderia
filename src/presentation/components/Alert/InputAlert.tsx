@@ -11,7 +11,7 @@ export const InputAlert: React.FC<AlertProps> = ({
   variant = "error",
   children,
 }) => {
-  const baseClasses = "p-4 mb-4 flex-row items-start rounded-sm";
+  const baseClasses = "p-4 mb-4 flex-row items-start rounded-sm mt-3";
 
   const variantClasses = {
     error: "bg-red-100   border-red-500",

@@ -9,16 +9,32 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import { Image } from "expo-image";
 
-import imgInicio from "@/assets/images/fondoPantalla.jpg";
-import { Colors } from "@/constants/Colors";
-import { globalStyles } from "@/globals/global-styles";
+import { useForm, Controller } from "react-hook-form";
+
 import { InputAlert } from "../../components/Alert/InputAlert";
+import imgInicio from "@/assets/images/fondoPantalla.jpg";
+import { globalStyles } from "@/globals/global-styles";
+import { Colors } from "@/constants/Colors";
+import { InputControl } from "./components/InputControl/InputControl";
+
+type FormData = {
+  user: string;
+  password: string;
+};
 
 export const LoginScreen = () => {
   const [activeInput, setActiveInput] = useState<string | null>(null);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    clearErrors,
+  } = useForm<FormData>();
+
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <View className="bg-white flex flex-row flex-1">
@@ -41,56 +57,33 @@ export const LoginScreen = () => {
 
             <View className="mt-10 flex justify-center align-middle ">
               <View className="flex flex-col gap-7">
-                <View style={styles.contentInput}>
-                  <TextInput
+                <View>
+                  <InputControl
+                    name="user"
+                    label="Usuario"
                     placeholder="Ingresa tu usuario"
-                    placeholderTextColor={Colors.gray_1}
-                    style={[
-                      globalStyles.inputText,
-                      activeInput === "usuario"
-                        ? globalStyles.inputTextActive
-                        : globalStyles.inputTextInactive,
-                    ]}
-                    onFocus={() => setActiveInput("usuario")}
-                    onBlur={() => setActiveInput(null)}
-                    // Si esta activo el input, se le agrega el estilo de input activo
+                    control={control}
+                    rules={{ required: true }}
+                    error={errors.user}
+                    isActive={activeInput === "user"}
+                    setActiveInput={setActiveInput}
+                    clearErrors={clearErrors}
                   />
-                  <Text
-                    style={[
-                      globalStyles.txtInput,
-                      activeInput === "usuario"
-                        ? globalStyles.txtActive
-                        : globalStyles.txtInactive,
-                    ]}
-                  >
-                    Usuario
-                  </Text>
                 </View>
-                <View style={styles.contentInput}>
-                  <TextInput
+                <View>
+                  <InputControl
+                    name="password"
+                    label="Contraseña"
                     placeholder="Ingresa tu contraseña"
-                    placeholderTextColor={Colors.gray_1}
-                    style={[
-                      globalStyles.inputText,
-                      activeInput === "password"
-                        ? globalStyles.inputTextActive
-                        : globalStyles.inputTextInactive,
-                    ]}
-                    onFocus={() => setActiveInput("password")}
-                    onBlur={() => setActiveInput(null)}
+                    control={control}
+                    rules={{ required: true, maxLength: 8 }}
+                    secureTextEntry
+                    error={errors.password}
+                    isActive={activeInput === "password"}
+                    setActiveInput={setActiveInput}
+                    clearErrors={clearErrors}
                   />
-                  <Text
-                    style={[
-                      globalStyles.txtInput,
-                      activeInput === "password"
-                        ? globalStyles.txtActive
-                        : globalStyles.txtInactive,
-                    ]}
-                  >
-                    Contraseña
-                  </Text>
                 </View>
-                <InputAlert variant="error">Contraseña incorrecta.</InputAlert>
               </View>
               <View className="mt-4">
                 <TouchableOpacity>
@@ -101,7 +94,10 @@ export const LoginScreen = () => {
               </View>
 
               <View className="mt-10 items-center b">
-                <TouchableOpacity className="bg-primary p-4 rounded-lg max-w-56 w-full">
+                <TouchableOpacity
+                  className="bg-primary p-4 rounded-lg max-w-56 w-full"
+                  onPress={handleSubmit(onSubmit)}
+                >
                   <Text className="text-center color-white font-semibold">
                     Iniciar Sesión
                   </Text>
@@ -116,14 +112,6 @@ export const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  contentInput: {
-    width: 336,
-    position: "relative",
-    maxHeight: 46,
-  },
-  inputsWrapper: {
-    width: 336,
-  },
   txtOlvidar: {
     color: Colors.gray_1,
     textAlign: "right",
