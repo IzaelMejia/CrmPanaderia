@@ -18,15 +18,17 @@ import imgInicio from "@/assets/images/fondoPantalla.jpg";
 import { globalStyles } from "@/globals/global-styles";
 import { Colors } from "@/constants/Colors";
 import { InputControl } from "./components/InputControl/InputControl";
+import { ModalRecuperarPassword } from "./components/Modales/ModalRecuperarPassword";
 
 type FormData = {
   user: string;
   password: string;
+  email: string;
 };
 
 export const LoginScreen = () => {
   const [activeInput, setActiveInput] = useState<string | null>(null);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     control,
     handleSubmit,
@@ -86,7 +88,7 @@ export const LoginScreen = () => {
                 </View>
               </View>
               <View className="mt-4">
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text style={styles.txtOlvidar}>
                     ¿Olvidaste tu contraseña?
                   </Text>
@@ -107,6 +109,16 @@ export const LoginScreen = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
+
+      <ModalRecuperarPassword
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSend={(email) => {
+          setModalVisible(false);
+        }}
+        isActive={activeInput === "email"}
+        setActiveInput={setActiveInput}
+      />
     </View>
   );
 };
@@ -116,6 +128,6 @@ const styles = StyleSheet.create({
     color: Colors.gray_1,
     textAlign: "right",
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: "600",
   },
 });

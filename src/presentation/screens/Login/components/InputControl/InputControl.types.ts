@@ -1,5 +1,5 @@
 export type InputControlProps = {
-  name: "user" | "password";
+  name: "user" | "password" | "email";
   label: string;
   placeholder: string;
   secureTextEntry?: boolean;
@@ -8,5 +8,5 @@ export type InputControlProps = {
   error: any;
   isActive: boolean;
   setActiveInput: (v: string | null) => void;
-  clearErrors: (name?: "user" | "password") => void;
+  clearErrors: (name?: "user" | "password" | "email") => void;
 };

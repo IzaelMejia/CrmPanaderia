@@ -20,9 +20,7 @@ export const InputControl = ({
   setActiveInput,
   clearErrors,
 }: InputControlProps) => {
-   // Solo para el password
   const [showPassword, setShowPassword] = useState(false);
-
   const isPassword = name === "password";
 
   return (
