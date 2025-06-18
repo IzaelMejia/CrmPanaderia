@@ -5,9 +5,18 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { store } from "@/src/infrastructure/store/store";
-import "../global.css"
+import "../global.css";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useEffect } from "react";
 
 export default function _layout() {
+  
+  useEffect(() => {
+    ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT
+    );
+  }, []);
+
   return (
     <Provider store={store}>
       <SafeAreaView

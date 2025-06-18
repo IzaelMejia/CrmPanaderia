@@ -37,6 +37,7 @@ export const ModalRecuperarPassword = ({
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
+      supportedOrientations={["landscape-left", "landscape-right"]}
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View
@@ -49,8 +50,8 @@ export const ModalRecuperarPassword = ({
           >
             <View className="w-11/12 items-center">
               <Text
-                className="color-primary font-extrabold"
-                style={{ fontSize: 32 }}
+                className="color-primary font-extrabold text-center"
+                style={{ fontSize: 30 }}
               >
                 Recuperar contraseña
               </Text>
@@ -59,7 +60,6 @@ export const ModalRecuperarPassword = ({
                 recuperar tu contraseña.
               </Text>
 
-              {/* Input Email */}
               <View className="w-full mt-8">
                 <InputControl
                   name="email"
