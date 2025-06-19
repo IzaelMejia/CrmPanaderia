@@ -13,11 +13,11 @@ import { AppToast } from "@/src/presentation/components/Toast/Toast";
 
 export default function _layout() {
   
-  useEffect(() => {
-    ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT
-    );
-  }, []);
+  // useEffect(() => {
+  //   ScreenOrientation.lockAsync(
+  //     ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT
+  //   );
+  // }, []);
 
   return (
     <Provider store={store}>

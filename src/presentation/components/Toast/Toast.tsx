@@ -25,16 +25,29 @@ const toastConfig = {
   toastSucces: ({ text1, text2 }: any) => {
     return (
       <View style={[styles.toast, styles.toastSuccesContainer]}>
-        <CircleCheckBig color="#fff" size={20} />
-        <Text>{text1}</Text>
-        <Text>{text2}</Text>
+        <View style={{width: "8%"}}>
+
+        <CircleCheckBig
+          color={Colors.succes}
+          size={24}
+        />
+        </View>
+        <View style={{width: "88%"}}>
+          <Text style={styles.txtToast}>{text1}</Text>
+          <Text style={styles.txtToast}>{text2}</Text>
+        </View>
       </View>
     );
   },
 };
 
-
-export const AppToast = () => <Toast config={toastConfig} position="bottom" />;
+export const AppToast = () => (
+  <Toast
+    config={toastConfig}
+    position="bottom"
+    bottomOffset={16}
+  />
+);
 export const showSuccess = (message: string, description?: string) => {
   Toast.show({ type: "success", text1: message, text2: description });
 };
@@ -49,15 +62,23 @@ export const showToastSucces = (message: string, description?: string) => {
 
 const styles = StyleSheet.create({
   toast: {
-    height: 60,
+    // height: 60,
+    minHeight: 60,
     width: 340,
     borderRadius: 4,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     display: "flex",
     flexDirection: "row",
     paddingVertical: 17,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
+    alignSelf: "flex-end",
+    marginRight: 16,
+  },
+  toastSubContain:{
+    display: "flex",
+    flexDirection: "column",
+    gap: 2
   },
   toastSuccesContainer: {
     backgroundColor: Colors.aletSucces,
@@ -65,5 +86,6 @@ const styles = StyleSheet.create({
   txtToast: {
     fontSize: 18,
     fontWeight: "500",
+    color: Colors.txtAlertSucces,
   },
 });

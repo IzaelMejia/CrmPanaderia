@@ -36,17 +36,16 @@ export const LoginScreen = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
-  } = useForm<FormData>();
+  } = useForm<FormData>();  
 
   const onSubmit = (data: any) => console.log(data);
 
   const showExample = () => {
-    showToastSucces('Bienvenido', 'Usuario')
+    showToastSucces('Bienvenido')
   };
 
   return (
     <View className="bg-white flex flex-row flex-1">
-      
       <View className="w-2/4">
         <Image
           source={imgInicio}

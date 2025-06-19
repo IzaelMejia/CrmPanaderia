@@ -7,5 +7,6 @@ export const Colors = {
   white: "#FFFFFF",
   opacity: "rgba(0, 0, 0, 0.5)",
   aletSucces: "#0C130D",
-  txtAlertSucces: "#CAE5CB"
+  txtAlertSucces: "#CAE5CB",
+  succes: "#00c951"
 };
