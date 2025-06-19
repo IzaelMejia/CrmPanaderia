@@ -7,10 +7,13 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { globalStyles } from "@/globals/global-styles";
-import { RecuperarPasswordProps } from "./RecuperarPassword.types";
+
 import { useForm } from "react-hook-form";
+
+import { RecuperarPasswordProps } from "./RecuperarPassword.types";
 import { InputControl } from "../InputControl/InputControl";
+import { globalStyles } from "@/globals/global-styles";
+
 
 export const ModalRecuperarPassword = ({
   visible,

@@ -8,6 +8,8 @@ import { store } from "@/src/infrastructure/store/store";
 import "../global.css";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect } from "react";
+import Toast from 'react-native-toast-message';
+import { AppToast } from "@/src/presentation/components/Toast/Toast";
 
 export default function _layout() {
   
@@ -31,6 +33,7 @@ export default function _layout() {
           headerShown: false,
         }}
       />
+      <AppToast />
     </Provider>
   );
 }

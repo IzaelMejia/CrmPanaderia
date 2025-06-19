@@ -1,12 +1,14 @@
 import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native";
-import { InputControlProps } from "./InputControl.types";
+import { useState } from "react";
+
 import { Controller } from "react-hook-form";
-import { Colors } from "@/constants/Colors";
-import { globalStyles } from "@/globals/global-styles";
+import { Eye, EyeOff } from "lucide-react-native";
+
 import { InputAlert } from "../../../../components/Alert/InputAlert";
 import { errorMessages } from "../../../../ErrorMessages/errorMessages";
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react-native";
+import { InputControlProps } from "./InputControl.types";
+import { globalStyles } from "@/globals/global-styles";
+import { Colors } from "@/constants/Colors";
 
 export const InputControl = ({
   name,

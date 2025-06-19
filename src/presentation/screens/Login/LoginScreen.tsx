@@ -9,16 +9,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { Image } from "expo-image";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import { InputAlert } from "../../components/Alert/InputAlert";
-import imgInicio from "@/assets/images/fondoPantalla.jpg";
-import { globalStyles } from "@/globals/global-styles";
-import { Colors } from "@/constants/Colors";
-import { InputControl } from "./components/InputControl/InputControl";
 import { ModalRecuperarPassword } from "./components/Modales/ModalRecuperarPassword";
+import { InputControl } from "./components/InputControl/InputControl";
+import { AppToast, showToastSucces } from "../../components/Toast/Toast";
+import { Colors } from "@/constants/Colors";
+
+import imgInicio from "@/assets/images/fondoPantalla.jpg";
+import Toast from "react-native-toast-message";
 
 type FormData = {
   user: string;
@@ -38,8 +40,13 @@ export const LoginScreen = () => {
 
   const onSubmit = (data: any) => console.log(data);
 
+  const showExample = () => {
+    showToastSucces('Bienvenido', 'Usuario')
+  };
+
   return (
     <View className="bg-white flex flex-row flex-1">
+      
       <View className="w-2/4">
         <Image
           source={imgInicio}
@@ -98,7 +105,8 @@ export const LoginScreen = () => {
               <View className="mt-10 items-center b">
                 <TouchableOpacity
                   className="bg-primary p-4 rounded-lg max-w-56 w-full"
-                  onPress={handleSubmit(onSubmit)}
+                  // onPress={handleSubmit(onSubmit)}
+                  onPress={showExample}
                 >
                   <Text className="text-center color-white font-semibold">
                     Iniciar Sesión
