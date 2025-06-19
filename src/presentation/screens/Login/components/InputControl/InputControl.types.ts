@@ -1,5 +1,7 @@
+import { LoginFieldName } from "../../Login.types";
+
 export type InputControlProps = {
-  name: "user" | "password" | "email";
+  name: LoginFieldName;
   label: string;
   placeholder: string;
   secureTextEntry?: boolean;
@@ -7,6 +9,6 @@ export type InputControlProps = {
   control: any;
   error: any;
   isActive: boolean;
-  setActiveInput: (v: string | null) => void;
-  clearErrors: (name?: "user" | "password" | "email") => void;
+   setActiveInput: (v: LoginFieldName | null) => void;
+  clearErrors: (name?: LoginFieldName) => void;
 };
