@@ -39,7 +39,6 @@ export const LoginScreen = () => {
     showToastSucces("Bienvenido");
   };
 
-
   return (
     <View className="bg-white flex flex-row flex-1">
       <View className="w-2/4">

@@ -19,7 +19,7 @@ interface AuthState {
 const initialState: AuthState = {
   status: "not-authenticated",
   user: null,
-  logged: false,
+  logged: true,
   permission: [],
 };
 

@@ -3,10 +3,10 @@ import React from "react";
 import { useAppSelector } from "@/src/infrastructure/store/hooks/reduxActions";
 
 export const HomeScreen = () => {
-  
+
   return (
-    <View>
-      <Text>HomeScreen</Text>
+    <View className="bg-slate-700 flex-1">
+      <Text className="text-white">Hola estas en el Home</Text>
     </View>
   );
 };
