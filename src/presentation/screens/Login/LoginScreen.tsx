@@ -15,15 +15,29 @@ import { Image } from "expo-image";
 import { useForm } from "react-hook-form";
 
 import { ModalRecuperarPassword } from "./components/Modales/ModalRecuperarPassword";
-import { showToastSucces } from "../../components/Toast/Toast";
+import { showError, showToastSucces } from "../../components/Toast/Toast";
 import { InputControl } from "./components/InputControl/InputControl";
 import { LoginFormData } from "./Login.types";
 import { Colors } from "@/constants/Colors";
 
 import imgInicio from "@/assets/images/fondoPantalla.jpg";
 import { LoginUseCase } from "@/src/application/use-cases/login.use-case";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@/src/infrastructure/store/hooks/reduxActions";
+import {
+  clearErrorMessage,
+  onChecking,
+  onLogin,
+  onLogout,
+} from "@/src/infrastructure/store/auth/authSlice";
+import { errorMessages } from "../../ErrorMessages/errorMessages";
+import { useRouter } from "expo-router";
 
 export const LoginScreen = () => {
+  const dispatch = useAppDispatch();
+  const { errorMessage } = useAppSelector((state) => state.auth);
   const [activeInput, setActiveInput] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const {
@@ -31,12 +45,27 @@ export const LoginScreen = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
+    setError,
   } = useForm<LoginFormData>();
 
+  const router = useRouter();
+
+  const handleSetActiveInput = (name: any) => {
+    dispatch(clearErrorMessage());
+    setActiveInput(name);
+  };
+
   const onSubmit = async (data: LoginFormData) => {
+    dispatch(onChecking());
     const login = new LoginUseCase();
-    await login.execute(data.user, data.password);
-    showToastSucces("Bienvenido");
+    try {
+      const user = await login.execute(data.user, data.password);
+      dispatch(onLogin(user));
+      router.navigate("/home");
+    } catch (e: any) {
+      setError("user", { type: "manual" });
+      setError("password", { type: "manual" });
+    }
   };
 
   return (
@@ -66,10 +95,15 @@ export const LoginScreen = () => {
                     label="Usuario"
                     placeholder="Ingresa tu usuario"
                     control={control}
-                    rules={{ required: true }}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: errorMessages.user.required,
+                      },
+                    }}
                     error={errors.user}
                     isActive={activeInput === "user"}
-                    setActiveInput={setActiveInput}
+                    setActiveInput={handleSetActiveInput}
                     clearErrors={clearErrors}
                   />
                 </View>
@@ -79,11 +113,20 @@ export const LoginScreen = () => {
                     label="Contraseña"
                     placeholder="Ingresa tu contraseña"
                     control={control}
-                    rules={{ required: true, maxLength: 8 }}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: errorMessages.password.required,
+                      },
+                      maxLength: {
+                        value: 8,
+                        message: errorMessages.password.maxLength,
+                      },
+                    }}
                     secureTextEntry
                     error={errors.password}
                     isActive={activeInput === "password"}
-                    setActiveInput={setActiveInput}
+                    setActiveInput={handleSetActiveInput}
                     clearErrors={clearErrors}
                   />
                 </View>
@@ -118,7 +161,7 @@ export const LoginScreen = () => {
           setModalVisible(false);
         }}
         isActive={activeInput === "email"}
-        setActiveInput={setActiveInput}
+        setActiveInput={handleSetActiveInput}
       />
     </View>
   );

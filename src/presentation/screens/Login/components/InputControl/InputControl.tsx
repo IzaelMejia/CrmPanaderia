@@ -1,4 +1,10 @@
-import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { useState } from "react";
 
 import { Controller } from "react-hook-form";
@@ -24,10 +30,16 @@ export const InputControl = ({
 }: InputControlProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = name === "password";
+  const currentMsg = error?.message ?? errorMessages[name]?.[error?.type ?? ""];
 
   return (
     <View>
-      <View style={[styles.contentInput, { flexDirection: "row", alignItems: "center" }]}>
+      <View
+        style={[
+          styles.contentInput,
+          { flexDirection: "row", alignItems: "center" },
+        ]}
+      >
         <Controller
           control={control}
           name={name}
@@ -71,9 +83,15 @@ export const InputControl = ({
                   activeOpacity={0.6}
                 >
                   {showPassword ? (
-                    <EyeOff size={22} color={Colors.black} />
+                    <EyeOff
+                      size={22}
+                      color={Colors.black}
+                    />
                   ) : (
-                    <Eye size={22} color={Colors.black} />
+                    <Eye
+                      size={22}
+                      color={Colors.black}
+                    />
                   )}
                 </TouchableOpacity>
               )}
@@ -89,7 +107,7 @@ export const InputControl = ({
           {label}
         </Text>
       </View>
-      {error && <InputAlert variant="error">{errorMessages[name]}</InputAlert>}
+      {currentMsg && <InputAlert variant="error">{currentMsg}</InputAlert>}
     </View>
   );
 };
