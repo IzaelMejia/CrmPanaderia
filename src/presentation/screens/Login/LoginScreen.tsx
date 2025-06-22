@@ -15,29 +15,23 @@ import { Image } from "expo-image";
 import { useForm } from "react-hook-form";
 
 import { ModalRecuperarPassword } from "./components/Modales/ModalRecuperarPassword";
-import { showError, showToastSucces } from "../../components/Toast/Toast";
 import { InputControl } from "./components/InputControl/InputControl";
 import { LoginFormData } from "./Login.types";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@constants/Colors";
 
-import imgInicio from "@/assets/images/fondoPantalla.jpg";
-import { LoginUseCase } from "@/src/application/use-cases/login.use-case";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "@/src/infrastructure/store/hooks/reduxActions";
+import imgInicio from "@assets/images/fondoPantalla.jpg";
+import { LoginUseCase } from "@src/application/use-cases/login.use-case";
 import {
   clearErrorMessage,
   onChecking,
   onLogin,
-  onLogout,
-} from "@/src/infrastructure/store/auth/authSlice";
+} from "@src/infrastructure/store/auth/authSlice";
 import { errorMessages } from "../../ErrorMessages/errorMessages";
 import { useRouter } from "expo-router";
+import { useAppDispatch } from "@src/infrastructure/store/hooks/reduxActions";
 
 export const LoginScreen = () => {
   const dispatch = useAppDispatch();
-  const { errorMessage } = useAppSelector((state) => state.auth);
   const [activeInput, setActiveInput] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const {

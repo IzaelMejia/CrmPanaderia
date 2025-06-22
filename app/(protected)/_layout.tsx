@@ -4,14 +4,37 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import { House, LogOut, NotepadText } from "lucide-react-native";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAppDispatch } from "@src/infrastructure/store/hooks/reduxActions";
+import { onLogout } from "@src/infrastructure/store/auth/authSlice";
+import { Colors } from "@constants/Colors";
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
+  const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(onLogout());
+  };
+
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
+    <View style={styles.container}>
+      <DrawerContentScrollView {...props} contentContainerStyle={styles.scroll}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+
+      <DrawerItem
+        label="Cerrar sesión"
+        icon={({ color, size }) => <LogOut color={color} size={size} />}
+        onPress={() => handleLogout()}
+        style={[styles.logout, { marginBottom: insets.bottom + 4 }]}
+        labelStyle={styles.logoutLabel}
+      />
+    </View>
   );
 }
 
@@ -21,8 +44,9 @@ export default function _layout() {
       <Drawer
         drawerContent={CustomDrawerContent}
         screenOptions={{
-          drawerActiveTintColor: "red",
+          drawerActiveTintColor: Colors.primary,
           drawerHideStatusBarOnOpen: true,
+          headerShown: false,
         }}
       >
         <Drawer.Screen
@@ -30,9 +54,32 @@ export default function _layout() {
           options={{
             drawerLabel: "Home",
             title: "Inicar",
+            drawerIcon: ({ size, color }) => (
+              <House color={color} size={size} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="pedidos"
+          options={{
+            drawerLabel: "Pedidos",
+            title: "Pedidos",
+            drawerIcon: ({ size, color }) => (
+              <NotepadText color={color} size={size} />
+            ),
           }}
         />
       </Drawer>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  scroll: { flexGrow: 1 },
+  logout: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "#ccc",
+  },
+  logoutLabel: { color: Colors.gray_1 },
+});

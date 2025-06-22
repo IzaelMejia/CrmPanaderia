@@ -2,7 +2,7 @@ import { LoginFieldName } from "../screens/Login/Login.types";
 
 export const errorMessages: Record<
   LoginFieldName,
-  Record<string, string>      // 2-nivel: campo → tipo de error → mensaje
+  Record<string, string>
 > = {
   user: {
     required : "El usuario es obligatorio.",

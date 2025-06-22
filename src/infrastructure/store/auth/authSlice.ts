@@ -1,5 +1,5 @@
-import { Permission } from "@/src/domain/entities/permission.entity";
-import { User } from "@/src/domain/entities/user.entity";
+import { Permission } from "@src/domain/entities/permission.entity";
+import { User } from "@src/domain/entities/user.entity";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type AuthStatus =
@@ -40,11 +40,11 @@ export const authSlice = createSlice({
       state.errorMessage = undefined;
       state.logged = true;
     },
-    onLogout: (state, { payload }) => {
+    onLogout: (state) => {
       state.status = "not-authenticated";
       state.user = {};
       state.permission = [];
-      state.errorMessage = payload;
+      state.errorMessage = undefined;
       state.logged = false;
     },
 

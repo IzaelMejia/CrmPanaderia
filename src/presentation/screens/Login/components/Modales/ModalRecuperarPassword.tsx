@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 
 import { RecuperarPasswordProps } from "./RecuperarPassword.types";
 import { InputControl } from "../InputControl/InputControl";
-import { globalStyles } from "@/globals/global-styles";
+import { globalStyles } from "@globals/global-styles";
 
 
 export const ModalRecuperarPassword = ({

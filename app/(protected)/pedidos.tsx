@@ -1,6 +1,5 @@
-// app/home.tsx
 import React from "react";
-import { HomeScreen } from "@src/presentation/screens/Home/HomeScreen";
+import { PedidosScreen } from "@src/presentation/screens/Pedidos/PedidosScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Colors } from "@constants/Colors";
@@ -15,7 +14,7 @@ export default function HomeRoute() {
       >
         <StatusBar style="light" backgroundColor="blue" />
       </SafeAreaView>
-      <HomeScreen />
+      <PedidosScreen />
     </>
   );
 }

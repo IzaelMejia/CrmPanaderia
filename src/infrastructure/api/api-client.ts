@@ -11,7 +11,7 @@ export class ApiClient {
   async request<T>(path: string, options: AxiosRequestConfig = {}): Promise<T> {
     const url = `${this.baseUrl}${path}`;
     const response = await axios({ url, ...options });
-    console.log("Response:", response);
+    // console.log("Response:", response);
     return response.data as T; //Respuesta tipo T
   }
 

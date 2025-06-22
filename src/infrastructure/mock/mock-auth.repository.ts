@@ -1,6 +1,6 @@
-import { AuthRepository } from "@/src/domain/repository/auth.repository";
-import { User } from "@/src/domain/entities/user.entity";
-import { Permission } from "@/src/domain/entities/permission.entity";
+import { AuthRepository } from "@src/domain/repository/auth.repository";
+import { User } from "@src/domain/entities/user.entity";
+import { Permission } from "@src/domain/entities/permission.entity";
 
 const mockPermissions: Permission[] = [
   {

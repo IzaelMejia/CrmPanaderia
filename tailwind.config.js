@@ -12,7 +12,10 @@ module.exports = {
         primary: "#038C25",
         secondary: "#F59E0B",
         rojo: "#CA3433",
-        rojoAlerte: "#5F2120"
+        rojoAlerte: "#5F2120",
+        gray_1: "#8B7F7F",
+        black_1: "#2D2D2D",
+        white_1: "#EDEDED",
       },
     },
   },

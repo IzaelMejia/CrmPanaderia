@@ -1,5 +1,5 @@
-import { User } from "@/src/domain/entities/user.entity";
-import { AuthRepository } from "@/src/domain/repository/auth.repository";
+import { User } from "@src/domain/entities/user.entity";
+import { AuthRepository } from "@src/domain/repository/auth.repository";
 import { apiClient } from "./api-client";
 import axios from "axios";
 

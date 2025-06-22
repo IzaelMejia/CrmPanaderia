@@ -13,8 +13,8 @@ import { Eye, EyeOff } from "lucide-react-native";
 import { InputAlert } from "../../../../components/Alert/InputAlert";
 import { errorMessages } from "../../../../ErrorMessages/errorMessages";
 import { InputControlProps } from "./InputControl.types";
-import { globalStyles } from "@/globals/global-styles";
-import { Colors } from "@/constants/Colors";
+import { globalStyles } from "@globals/global-styles";
+import { Colors } from "@constants/Colors";
 
 export const InputControl = ({
   name,
