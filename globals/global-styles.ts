@@ -6,6 +6,15 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.opacity,
   },
+  containerAbsoluteOpacity: {
+    flex: 1,
+    backgroundColor: "#0000005e",
+    opacity: 1,
+    position: "absolute",
+    zIndex: 2,
+    width: "100%",
+    height: "100%",
+  },
   inputText: {
     width: "100%",
     height: "100%",
@@ -35,5 +44,4 @@ export const globalStyles = StyleSheet.create({
   txtInactive: {
     color: Colors.gray_1,
   },
-  
 });

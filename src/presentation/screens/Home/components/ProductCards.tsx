@@ -1,0 +1,164 @@
+import {
+  FlatList,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import React, { FC, useCallback, useState } from "react";
+import { Colors } from "@constants/Colors";
+import { Product } from "@src/domain/entities/product.entity";
+import { Minus, Plus } from "lucide-react-native";
+
+type CardProps = Pick<Product, "name" | "category" | "price">;
+
+interface ProductCardsProps {
+  data: Product[];
+}
+
+export const ProductCards: FC<ProductCardsProps> = ({ data }) => {
+
+  const CARD_WIDTH = 176 + 16;
+  const [containerWidth, setContainerWidth] = useState(0);
+  const numColumns = Math.max(1, Math.floor(containerWidth / CARD_WIDTH));
+
+  const handleLayout = useCallback((event: LayoutChangeEvent) => {
+    setContainerWidth(event.nativeEvent.layout.width);
+  }, []);
+
+  const Card: FC<CardProps> = ({ name, category, price }) => {
+    return (
+      <View
+        style={[
+          styles.cardContainer,
+        //   { borderColor: Colors.primary, borderWidth: 1 },
+        ]}
+      >
+        <View style={styles.imgContainer}></View>
+        <Text style={styles.title}>{name}</Text>
+        <View style={styles.priceCategory}>
+          <Text style={styles.price}>
+            ${Number(price).toLocaleString("en-US")}
+          </Text>
+          <Text style={styles.category}>{category}</Text>
+        </View>
+        <View style={styles.btnAgregar}>
+          <View style={styles.contentIncrement}>
+            <TouchableOpacity style={styles.btnIncremet}>
+              <Minus size={14} color={Colors.white} />
+            </TouchableOpacity>
+            <Text style={styles.textIncremet}>2</Text>
+            <TouchableOpacity style={styles.btnIncremet}>
+              <Plus size={14} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* <TouchableOpacity style={styles.btnAgregar}>
+          <Text style={styles.textAgregar}>Agregar</Text>
+        </TouchableOpacity> */}
+      </View>
+    );
+  };
+
+  return (
+    <View className="d-flex flex-row" onLayout={handleLayout}>
+      {containerWidth > 0 && (
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <Card
+              name={item.name}
+              price={item.price}
+              category={item.category}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          numColumns={numColumns}
+          columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+          contentContainerStyle={{ padding: 8, paddingBottom: 200 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    width: 176,
+    height: "auto",
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    borderRadius: 6,
+    boxShadow: "2px 2px 4px 0 #00000020",
+  },
+  imgContainer: {
+    width: "100%",
+    height: 104,
+    backgroundColor: "green",
+    borderRadius: 6,
+  },
+  row: {
+    flex: 1,
+    justifyContent: "flex-start",
+    gap: 16,
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginTop: 8,
+  },
+  priceCategory: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 4,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: Colors.primary,
+  },
+  category: {
+    fontSize: 12,
+    color: Colors.gray_1,
+    fontWeight: "700",
+  },
+  btnAgregar: {
+    height: 36,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.green_1,
+    marginTop: 7,
+    borderRadius: 6,
+    paddingHorizontal: 15,
+  },
+  contentIncrement: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textIncremet: {
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  textAgregar: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.black_1,
+  },
+  btnIncremet: {
+    height: 26,
+    width: 26,
+    borderRadius: 100,
+    backgroundColor: Colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

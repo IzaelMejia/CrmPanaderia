@@ -1,0 +1,1 @@
+export type CategoriesProducts = "Pan dulce" | "Pan salado" | "Cocoles" ;

@@ -16,6 +16,8 @@ import { InputSearch } from "@src/presentation/components/InputSearch/InputSearc
 import { useNavigation, useRouter } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
 import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
+import { CategoriesCards } from "./components/CategoriesCards";
+import { ProductCards } from "./components/ProductCards";
 
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
@@ -41,6 +43,31 @@ export const HomeScreen = () => {
             placeholder="Buscar productos..."
             autoFocus
           />
+        </View>
+        <View className="mt-8">
+          <CategoriesCards />
+        </View>
+        <View className="mt-3 d-flex flex-row justify-between">
+          <View>
+            <Text className="text-black_1 text-3xl font-extrabold">
+              Pan dulce <Text className="text-sm">(5)</Text>
+            </Text>
+          </View>
+          <View className="d-flex flex-row">
+            <TouchableOpacity
+              style={[styles.switchFilt, styles.switchFiltPiza]}
+            >
+              <Text className="text-white font-bold text-sm">Pieza</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.switchFilt, styles.switchFiltBolsa]}
+            >
+              <Text className="text-gray_1 font-bold text-sm">Bolsa</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View className="mt-4 ">
+        <ProductCards data={[]}/>
         </View>
       </View>
       <View style={styles.containerRigth}>
@@ -142,5 +169,21 @@ const styles = StyleSheet.create({
   touchableIncrement: {
     width: 26,
     height: 26,
+  },
+  switchFilt: {
+    width: 64,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  switchFiltPiza: {
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    backgroundColor: Colors.primary,
+  },
+  switchFiltBolsa: {
+    borderTopRightRadius: 6,
+    borderBottomEndRadius: 6,
+    backgroundColor: "#E9CECE",
   },
 });
