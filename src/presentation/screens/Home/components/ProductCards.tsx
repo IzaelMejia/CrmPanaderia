@@ -7,22 +7,33 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { Colors } from "@constants/Colors";
 import { Product } from "@src/domain/entities/product.entity";
 import { Minus, Plus } from "lucide-react-native";
+import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
 
 type CardProps = Pick<Product, "name" | "category" | "price">;
 
 interface ProductCardsProps {
   data: Product[];
+  loading: boolean;
 }
 
-export const ProductCards: FC<ProductCardsProps> = ({ data }) => {
-
+export const ProductCards: FC<ProductCardsProps> = ({
+  data,
+  loading = false,
+}) => {
   const CARD_WIDTH = 176 + 16;
   const [containerWidth, setContainerWidth] = useState(0);
-  const numColumns = Math.max(1, Math.floor(containerWidth / CARD_WIDTH));
+
+  const numColumns = useMemo(
+    () => Math.max(1, Math.floor(containerWidth / CARD_WIDTH)),
+    [containerWidth]
+  );
+
+  const skeletonData = useMemo(() => Array.from({ length: 6 }, (_, i) => i.toString()), []);  
+
 
   const handleLayout = useCallback((event: LayoutChangeEvent) => {
     setContainerWidth(event.nativeEvent.layout.width);
@@ -33,7 +44,7 @@ export const ProductCards: FC<ProductCardsProps> = ({ data }) => {
       <View
         style={[
           styles.cardContainer,
-        //   { borderColor: Colors.primary, borderWidth: 1 },
+          //   { borderColor: Colors.primary, borderWidth: 1 },
         ]}
       >
         <View style={styles.imgContainer}></View>
@@ -64,23 +75,36 @@ export const ProductCards: FC<ProductCardsProps> = ({ data }) => {
 
   return (
     <View className="d-flex flex-row" onLayout={handleLayout}>
-      {containerWidth > 0 && (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <Card
-              name={item.name}
-              price={item.price}
-              category={item.category}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={numColumns}
-          columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
-          contentContainerStyle={{ padding: 8, paddingBottom: 200 }}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+      {containerWidth > 0 &&
+        (loading ? (
+          <FlatList
+            data={skeletonData}
+            renderItem={() => (
+              <SkeletonPlaceholder style={[styles.cardContainer, {height: 235}]}/>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={numColumns}
+            columnWrapperStyle={styles.row}
+            contentContainerStyle={{ padding: 8, paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Card
+                name={item.name}
+                price={item.price}
+                category={item.category}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            numColumns={numColumns}
+            columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+            contentContainerStyle={{ paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+          />
+        ))}
     </View>
   );
 };
@@ -92,7 +116,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
     borderRadius: 6,
-    boxShadow: "2px 2px 4px 0 #00000020",
+    boxShadow: "4px 2px 4px 1px #00000020",
+    backgroundColor: "#dfdada"
   },
   imgContainer: {
     width: "100%",
@@ -103,8 +128,8 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: "flex-start",
-    gap: 16,
-    marginBottom: 16,
+    gap: 12,
+    marginBottom: 14,
   },
   title: {
     fontSize: 16,
@@ -160,5 +185,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
+  },
+  skeletonBg: {
+    backgroundColor: Colors.white_1,
+  },
+  skeletonLine: {
+    height: 20,
+    borderRadius: 4,
+    backgroundColor: Colors.white_1,
+    marginTop: 8,
   },
 });

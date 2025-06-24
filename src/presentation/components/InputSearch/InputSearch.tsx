@@ -20,7 +20,6 @@ export function InputSearch({
   onChangeText,
   onSubmit,
   placeholder = "Buscar…",
-  autoFocus = false,
   ref: externalRef,
 }: InputSearchProps) {
   const internalRef = useRef<TextInput>(null);
@@ -50,7 +49,7 @@ export function InputSearch({
         onChangeText={emitChange}
         onSubmitEditing={handleSubmit}
         returnKeyType="search"
-        autoFocus={autoFocus}
+        autoFocus={false}
         autoCapitalize="none"
         autoCorrect={false}
         selectionColor="#038C25"

@@ -25,13 +25,9 @@ export class AuthApiRepository implements AuthRepository {
         email,
         password,
       });
-      console.log("Login", login);
-
       const profile = await apiClient.get<ProfileResponse>("/auth/profile", {
         Authorization: `Bearer ${login.access_token}`,
       });
-      console.log("profile", profile);
-
       return {
         id: profile.id,
         name: profile.name,

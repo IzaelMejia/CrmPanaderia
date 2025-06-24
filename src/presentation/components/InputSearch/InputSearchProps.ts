@@ -5,7 +5,6 @@ export interface InputSearchProps {
   placeholder?: string;
   onChangeText: (text: string) => void;
   onSubmit?: (text: string) => void;
-  autoFocus?: boolean;
   style?: ViewStyle;
   inputStyle?: TextStyle;
   ref?: React.Ref<TextInput>;
