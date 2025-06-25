@@ -1,39 +1,43 @@
-import {
-  GestureResponderEvent,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Colors } from "@constants/Colors";
-import { Menu, Minus, Plus } from "lucide-react-native";
-import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
-import { useNavigation, useRouter } from "expo-router";
-import { DrawerActions } from "@react-navigation/native";
-import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
-import { CategoriesCards } from "./components/CategoriesCards";
-import { ProductCards } from "./components/ProductCards";
-import { Product } from "@src/domain/entities/product.entity";
+
+import { GetCategoriesProducts } from "@src/application/use-cases/categories-products-use-case";
+import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
 import { GetProductsUseCase } from "@src/application/use-cases/get-products.use-case";
+import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
+import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
+import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import { CategoriesCards } from "./components/CategoriesCards";
+import { Product } from "@src/domain/entities/product.entity";
+import { ProductCards } from "./components/ProductCards";
 import { DetailOrden } from "./components/DetailOrden";
 import { InfoSwitch } from "./components/InfoSwitch";
+import { Colors } from "@constants/Colors";
 
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
   const [products, setProducts] = useState<Product[]>([]);
+  const [subCategories, setSubCategories] = useState<CategoriesProducts[]>(
+    []
+  );
+
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   useEffect(() => {
     const useCase = new GetProductsUseCase();
     useCase.execute().then((data) => {
       setProducts(data);
       setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    const useCase = new GetCategoriesProducts();
+    useCase.execute().then((data) => {
+      setSubCategories(data);
+      setLoadingCategories(false);
     });
   }, []);
 
@@ -54,7 +58,7 @@ export const HomeScreen = () => {
           />
         </View>
         <View className="mt-8">
-          <CategoriesCards />
+          <CategoriesCards data={subCategories} />
         </View>
         <View className="mt-3 d-flex flex-row justify-between">
           <InfoSwitch />

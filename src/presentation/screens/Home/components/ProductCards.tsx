@@ -13,7 +13,7 @@ import { Product } from "@src/domain/entities/product.entity";
 import { Minus, Plus } from "lucide-react-native";
 import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
 
-type CardProps = Pick<Product, "name" | "category" | "price">;
+type CardProps = Pick<Product, "name" | "tipo" | "price">;
 
 interface ProductCardsProps {
   data: Product[];
@@ -39,7 +39,7 @@ export const ProductCards: FC<ProductCardsProps> = ({
     setContainerWidth(event.nativeEvent.layout.width);
   }, []);
 
-  const Card: FC<CardProps> = ({ name, category, price }) => {
+  const Card: FC<CardProps> = ({ name, tipo, price }) => {
     return (
       <View
         style={[
@@ -53,7 +53,7 @@ export const ProductCards: FC<ProductCardsProps> = ({
           <Text style={styles.price}>
             ${Number(price).toLocaleString("en-US")}
           </Text>
-          <Text style={styles.category}>{category}</Text>
+          <Text style={styles.category}>{tipo.name}</Text>
         </View>
         <View style={styles.btnAgregar}>
           <View style={styles.contentIncrement}>
@@ -95,10 +95,10 @@ export const ProductCards: FC<ProductCardsProps> = ({
               <Card
                 name={item.name}
                 price={item.price}
-                category={item.category}
+                tipo={item.tipo}
               />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             numColumns={numColumns}
             columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
             contentContainerStyle={{ paddingBottom: 200 }}
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 6,
     boxShadow: "4px 2px 4px 1px #00000020",
-    backgroundColor: "#dfdada"
+    backgroundColor: "#e8e5e5"
   },
   imgContainer: {
     width: "100%",

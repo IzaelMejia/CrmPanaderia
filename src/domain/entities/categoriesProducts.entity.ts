@@ -1,1 +1,4 @@
-export type CategoriesProducts = "Pan dulce" | "Pan salado" | "Cocoles" ;
+export interface CategoriesProducts {
+  id: number;
+  name: string;
+}

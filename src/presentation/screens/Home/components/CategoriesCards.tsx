@@ -5,12 +5,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { Image } from "expo-image";
+
+import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
 import { globalStyles } from "@globals/global-styles";
 import panEjemplo from "@assets/images/fondoPantalla.jpg";
 
-export const CategoriesCards = () => {
+interface CategoriesCardsProps {
+  data: CategoriesProducts[];
+}
+
+export const CategoriesCards: FC<CategoriesCardsProps> = ({ data }) => {
   return (
     <ScrollView contentContainerStyle={styles.containerScroll} horizontal>
       <TouchableOpacity style={styles.cardContainer}>
@@ -23,6 +29,18 @@ export const CategoriesCards = () => {
           <Text style={styles.text}>Todos</Text>
         </View>
       </TouchableOpacity>
+      {data.map((item, index) => (
+        <TouchableOpacity style={styles.cardContainer} key={index}>
+          <Image style={styles.imgs} source={panEjemplo} />
+          <View
+            style={globalStyles.containerAbsoluteOpacity}
+            className="rounded-md items-center justify-center"
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      ))}
     </ScrollView>
   );
 };

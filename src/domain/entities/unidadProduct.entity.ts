@@ -1,1 +1,4 @@
-export type UnidadProduct = "Pieza" | "Bolsa" ;
+export interface UnidadProduct {
+  id: number;
+  name: string;
+}
