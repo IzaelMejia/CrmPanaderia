@@ -49,7 +49,7 @@ export const mockProducts: Product[] = [
     id: 6,
     name: "Cocol",
     tipo: { id: 1, name: "Dulce" },
-    Category: { id: 1, name: "Cocoles" },
+    Category: { id: 3, name: "Cocoles" },
     price: 10,
     unidad: [
       { id: 1, name: "Pieza" },

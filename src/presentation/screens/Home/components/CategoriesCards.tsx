@@ -14,15 +14,33 @@ import panEjemplo from "@assets/images/fondoPantalla.jpg";
 
 interface CategoriesCardsProps {
   data: CategoriesProducts[];
+  selectedCategory: CategoriesProducts | null;
+  onSelect: (item: CategoriesProducts | null) => void;
 }
 
-export const CategoriesCards: FC<CategoriesCardsProps> = ({ data }) => {
+export const CategoriesCards: FC<CategoriesCardsProps> = ({
+  data,
+  selectedCategory,
+  onSelect,
+}) => {
   return (
-    <ScrollView contentContainerStyle={styles.containerScroll} horizontal>
-      <TouchableOpacity style={styles.cardContainer}>
-        <Image style={styles.imgs} source={panEjemplo} />
+    <ScrollView
+      contentContainerStyle={styles.containerScroll}
+      horizontal
+    >
+      <TouchableOpacity
+        style={[styles.cardContainer, ,]}
+        onPress={() => onSelect(null)}
+      >
+        <Image
+          style={styles.imgs}
+          source={panEjemplo}
+        />
         <View
-          style={globalStyles.containerAbsoluteOpacity}
+          style={[
+            globalStyles.containerAbsoluteOpacity,
+            selectedCategory === null && styles.cardSelected,
+          ]}
           className="rounded-md items-center justify-center"
         />
         <View style={styles.textContainer}>
@@ -30,10 +48,20 @@ export const CategoriesCards: FC<CategoriesCardsProps> = ({ data }) => {
         </View>
       </TouchableOpacity>
       {data.map((item, index) => (
-        <TouchableOpacity style={styles.cardContainer} key={index}>
-          <Image style={styles.imgs} source={panEjemplo} />
+        <TouchableOpacity
+          style={[styles.cardContainer]}
+          key={index}
+          onPress={() => onSelect(item)}
+        >
+          <Image
+            style={styles.imgs}
+            source={panEjemplo}
+          />
           <View
-            style={globalStyles.containerAbsoluteOpacity}
+            style={[
+              globalStyles.containerAbsoluteOpacity,
+              selectedCategory?.id === item.id && styles.cardSelected,
+            ]}
             className="rounded-md items-center justify-center"
           />
           <View style={styles.textContainer}>
@@ -56,6 +84,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     position: "relative",
     zIndex: 1,
+  },
+  cardSelected: {
+    backgroundColor: "rgba(3, 140, 37, 0.40)",
+    opacity: 0.4,
   },
   imgs: {
     width: "100%",

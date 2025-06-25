@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { GetCategoriesProducts } from "@src/application/use-cases/categories-products-use-case";
 import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
@@ -17,13 +17,13 @@ import { Colors } from "@constants/Colors";
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
   const [products, setProducts] = useState<Product[]>([]);
-  const [subCategories, setSubCategories] = useState<CategoriesProducts[]>(
-    []
-  );
+  const [categories, setCategories] = useState<CategoriesProducts[]>([]);
 
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoriesProducts | null>(null);
 
   useEffect(() => {
     const useCase = new GetProductsUseCase();
@@ -36,7 +36,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     const useCase = new GetCategoriesProducts();
     useCase.execute().then((data) => {
-      setSubCategories(data);
+      setCategories(data);
       setLoadingCategories(false);
     });
   }, []);
@@ -45,9 +45,29 @@ export const HomeScreen = () => {
     console.log("🔍 Buscar:", text);
   };
 
+  const filteredProducts = useMemo(() => {
+    if (selectedCategory === null) return products;
+    return products.filter((p) => p.Category?.id === selectedCategory?.id);
+  }, [products, selectedCategory]);
+
+  const totalProducts = useMemo(() => {
+    return filteredProducts?.length;
+  }, [filteredProducts]);
+
+  const nameCategory = useMemo(() => {
+    if (selectedCategory === null) return "Todos";
+    return selectedCategory?.name;
+  }, [filteredProducts]);
+
   return (
-    <View className="flex-1 flex flex-row" style={styles.container}>
-      <View style={styles.containerLeft} className=" p-4">
+    <View
+      className="flex-1 flex flex-row"
+      style={styles.container}
+    >
+      <View
+        style={styles.containerLeft}
+        className=" p-4"
+      >
         <View className="d-flex flex-row items-center gap-5">
           <TouchDrawer />
           <InputSearch
@@ -58,13 +78,20 @@ export const HomeScreen = () => {
           />
         </View>
         <View className="mt-8">
-          <CategoriesCards data={subCategories} />
+          <CategoriesCards
+            data={categories}
+            selectedCategory={selectedCategory}
+            onSelect={setSelectedCategory}
+          />
         </View>
         <View className="mt-3 d-flex flex-row justify-between">
-          <InfoSwitch />
+          <InfoSwitch totalProducts={totalProducts} nameCategory={nameCategory}/>
         </View>
         <View className="mt-4 ">
-          <ProductCards data={products} loading={loading} />
+          <ProductCards
+            data={filteredProducts}
+            loading={loading}
+          />
         </View>
       </View>
       <View style={styles.containerRigth}>

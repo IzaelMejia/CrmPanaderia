@@ -1,13 +1,18 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { Colors } from "@constants/Colors";
 
-export const InfoSwitch = () => {
+ interface InfoSwitchProps {
+  totalProducts: number | null;
+  nameCategory: string | null;
+}
+
+export const InfoSwitch: FC<InfoSwitchProps>= ({totalProducts, nameCategory}) => {
   return (
     <>
       <View>
         <Text className="text-black_1 text-3xl font-extrabold">
-          Pan dulce <Text className="text-sm">(5)</Text>
+          {nameCategory} <Text className="text-sm">({totalProducts})</Text>
         </Text>
       </View>
       <View className="d-flex flex-row">
