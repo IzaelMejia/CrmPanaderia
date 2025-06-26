@@ -2,12 +2,19 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { FC } from "react";
 import { Colors } from "@constants/Colors";
 
- interface InfoSwitchProps {
+interface InfoSwitchProps {
   totalProducts: number | null;
   nameCategory: string | null;
+  unitSelected: "Pieza" | "Bolsa";
+  onChangeUnit: (unit: "Pieza" | "Bolsa") => void;
 }
 
-export const InfoSwitch: FC<InfoSwitchProps>= ({totalProducts, nameCategory}) => {
+export const InfoSwitch: FC<InfoSwitchProps> = ({
+  totalProducts,
+  nameCategory,
+  unitSelected,
+  onChangeUnit,
+}) => {
   return (
     <>
       <View>
@@ -16,11 +23,45 @@ export const InfoSwitch: FC<InfoSwitchProps>= ({totalProducts, nameCategory}) =>
         </Text>
       </View>
       <View className="d-flex flex-row">
-        <TouchableOpacity style={[styles.switchFilt, styles.switchFiltPiza]}>
-          <Text className="text-white font-bold text-sm">Pieza</Text>
+        <TouchableOpacity
+          onPress={() => onChangeUnit("Pieza")}
+          style={[
+            styles.switchFilt,
+            styles.switchFiltPiza,
+            {
+              backgroundColor:
+                unitSelected === "Pieza" ? Colors.primary : Colors.green_2,
+            },
+          ]}
+        >
+          <Text
+            className="text-white font-bold text-sm"
+            style={{
+              color: unitSelected === "Pieza" ? Colors.white : Colors.gray_1,
+            }}
+          >
+            Pieza
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.switchFilt, styles.switchFiltBolsa]}>
-          <Text className="text-gray_1 font-bold text-sm">Bolsa</Text>
+        <TouchableOpacity
+          onPress={() => onChangeUnit("Bolsa")}
+          style={[
+            styles.switchFilt,
+            styles.switchFiltBolsa,
+            {
+              backgroundColor:
+                unitSelected === "Bolsa" ? Colors.rojo : Colors.rojo_2,
+            },
+          ]}
+        >
+          <Text
+            className="text-gray_1 font-bold text-sm"
+            style={{
+              color: unitSelected === "Bolsa" ? Colors.white : Colors.gray_1,
+            }}
+          >
+            Bolsa
+          </Text>
         </TouchableOpacity>
       </View>
     </>

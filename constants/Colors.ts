@@ -1,9 +1,11 @@
 export const Colors = {
   primary: "#038C25",
   green_1: "#CEE9D3",
+  green_2: "#CEE9CE",
   backgroundWhite: "#EDEDED",
   rojo: "#CA3433",
   rojo_1: "#FDEDED",
+  rojo_2: "#E9CECE",
   gray: "#313131",
   gray_1: "#8B7F7F",
   black: "#000000",
@@ -13,5 +15,5 @@ export const Colors = {
   opacity: "rgba(0, 0, 0, 0.5)",
   aletSucces: "#0C130D",
   txtAlertSucces: "#CAE5CB",
-  succes: "#00c951"
+  succes: "#00c951",
 };

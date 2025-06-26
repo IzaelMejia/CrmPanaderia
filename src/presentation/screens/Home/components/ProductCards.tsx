@@ -18,11 +18,13 @@ type CardProps = Pick<Product, "name" | "tipo" | "price">;
 interface ProductCardsProps {
   data: Product[];
   loading: boolean;
+  unit: "Pieza" | "Bolsa";
 }
 
 export const ProductCards: FC<ProductCardsProps> = ({
   data,
   loading = false,
+  unit,
 }) => {
   const CARD_WIDTH = 176 + 16;
   const [containerWidth, setContainerWidth] = useState(0);
@@ -32,8 +34,10 @@ export const ProductCards: FC<ProductCardsProps> = ({
     [containerWidth]
   );
 
-  const skeletonData = useMemo(() => Array.from({ length: 6 }, (_, i) => i.toString()), []);  
-
+  const skeletonData = useMemo(
+    () => Array.from({ length: 6 }, (_, i) => i.toString()),
+    []
+  );
 
   const handleLayout = useCallback((event: LayoutChangeEvent) => {
     setContainerWidth(event.nativeEvent.layout.width);
@@ -55,14 +59,44 @@ export const ProductCards: FC<ProductCardsProps> = ({
           </Text>
           <Text style={styles.category}>{tipo.name}</Text>
         </View>
-        <View style={styles.btnAgregar}>
+        <View
+          style={[
+            styles.btnAgregar,
+            {
+              backgroundColor:
+                unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
+            },
+          ]}
+        >
           <View style={styles.contentIncrement}>
-            <TouchableOpacity style={styles.btnIncremet}>
-              <Minus size={14} color={Colors.white} />
+            <TouchableOpacity
+              style={[
+                styles.btnIncremet,
+                {
+                  backgroundColor:
+                    unit === "Pieza" ? Colors.primary : Colors.rojo,
+                },
+              ]}
+            >
+              <Minus
+                size={14}
+                color={Colors.white}
+              />
             </TouchableOpacity>
             <Text style={styles.textIncremet}>2</Text>
-            <TouchableOpacity style={styles.btnIncremet}>
-              <Plus size={14} color={Colors.white} />
+            <TouchableOpacity
+              style={[
+                styles.btnIncremet,
+                {
+                  backgroundColor:
+                    unit === "Pieza" ? Colors.primary : Colors.rojo,
+                },
+              ]}
+            >
+              <Plus
+                size={14}
+                color={Colors.white}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -74,13 +108,18 @@ export const ProductCards: FC<ProductCardsProps> = ({
   };
 
   return (
-    <View className="d-flex flex-row" onLayout={handleLayout}>
+    <View
+      className="d-flex flex-row"
+      onLayout={handleLayout}
+    >
       {containerWidth > 0 &&
         (loading ? (
           <FlatList
             data={skeletonData}
             renderItem={() => (
-              <SkeletonPlaceholder style={[styles.cardContainer, {height: 235}]}/>
+              <SkeletonPlaceholder
+                style={[styles.cardContainer, { height: 235 }]}
+              />
             )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={numColumns}
@@ -117,7 +156,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 6,
     boxShadow: "4px 2px 4px 1px #00000020",
-    backgroundColor: "#e8e5e5"
+    backgroundColor: "#e8e5e5",
   },
   imgContainer: {
     width: "100%",
@@ -157,7 +196,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.green_1,
     marginTop: 7,
     borderRadius: 6,
     paddingHorizontal: 15,
@@ -182,7 +220,6 @@ const styles = StyleSheet.create({
     height: 26,
     width: 26,
     borderRadius: 100,
-    backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },

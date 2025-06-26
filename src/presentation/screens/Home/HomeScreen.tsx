@@ -18,7 +18,7 @@ export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoriesProducts[]>([]);
-
+  const [unit, setUnit] = useState<"Pieza" | "Bolsa">("Pieza");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -46,9 +46,15 @@ export const HomeScreen = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    if (selectedCategory === null) return products;
-    return products.filter((p) => p.Category?.id === selectedCategory?.id);
-  }, [products, selectedCategory]);
+    let result = products;
+    if (selectedCategory !== null) {
+      result = result.filter((p) => p.Category?.id === selectedCategory.id);
+    }
+    if (unit) {
+      result = result.filter((p) => p.unidad?.some((u) => u.name === unit));
+    }
+    return result;
+  }, [products, selectedCategory, unit]);
 
   const totalProducts = useMemo(() => {
     return filteredProducts?.length;
@@ -85,12 +91,18 @@ export const HomeScreen = () => {
           />
         </View>
         <View className="mt-3 d-flex flex-row justify-between">
-          <InfoSwitch totalProducts={totalProducts} nameCategory={nameCategory}/>
+          <InfoSwitch
+            totalProducts={totalProducts}
+            nameCategory={nameCategory}
+            unitSelected={unit}
+            onChangeUnit={setUnit}
+          />
         </View>
         <View className="mt-4 ">
           <ProductCards
             data={filteredProducts}
             loading={loading}
+            unit={unit}
           />
         </View>
       </View>
