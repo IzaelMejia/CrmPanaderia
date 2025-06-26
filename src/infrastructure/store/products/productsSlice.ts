@@ -29,7 +29,7 @@ export const productsSlice = createSlice({
     setLoading: (state) => {
       state.isLoading = true;
     },
-    setProdusct: (state, action) => {
+    setProducts: (state, action) => {
       state.products = action.payload;
       state.isLoading = false;
       state.errorMessage = "";
@@ -37,4 +37,4 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { setLoading, setProdusct } = productsSlice.actions;
+export const { setLoading, setProducts } = productsSlice.actions;

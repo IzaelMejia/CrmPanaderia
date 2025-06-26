@@ -6,30 +6,40 @@ import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.enti
 import { GetProductsUseCase } from "@src/application/use-cases/get-products.use-case";
 import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
 import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
-import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@src/infrastructure/store/hooks/reduxActions";
 import { CategoriesCards } from "./components/CategoriesCards";
 import { Product } from "@src/domain/entities/product.entity";
 import { ProductCards } from "./components/ProductCards";
 import { DetailOrden } from "./components/DetailOrden";
 import { InfoSwitch } from "./components/InfoSwitch";
 import { Colors } from "@constants/Colors";
+import {
+  setLoading,
+  setProducts,
+} from "@src/infrastructure/store/products/productsSlice";
 
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, isLoading } = useAppSelector((state) => state.products);
+  // const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoriesProducts[]>([]);
   const [unit, setUnit] = useState<"Pieza" | "Bolsa">("Pieza");
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [loadingCategories, setLoadingCategories] = useState(true);
   const [selectedCategory, setSelectedCategory] =
     useState<CategoriesProducts | null>(null);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const useCase = new GetProductsUseCase();
     useCase.execute().then((data) => {
-      setProducts(data);
-      setLoading(false);
+      if (products.length <= 0) {
+        dispatch(setLoading());
+        dispatch(setProducts(data));
+      }
     });
   }, []);
 
@@ -37,7 +47,6 @@ export const HomeScreen = () => {
     const useCase = new GetCategoriesProducts();
     useCase.execute().then((data) => {
       setCategories(data);
-      setLoadingCategories(false);
     });
   }, []);
 
@@ -101,7 +110,7 @@ export const HomeScreen = () => {
         <View className="mt-4 ">
           <ProductCards
             data={filteredProducts}
-            loading={loading}
+            loading={isLoading}
             unit={unit}
           />
         </View>
