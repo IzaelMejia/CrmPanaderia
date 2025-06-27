@@ -34,14 +34,15 @@ export const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const useCase = new GetProductsUseCase();
+  const useCase = new GetProductsUseCase();
+  if (products.length <= 0) {
+    dispatch(setLoading()); 
     useCase.execute().then((data) => {
-      if (products.length <= 0) {
-        dispatch(setLoading());
-        dispatch(setProducts(data));
-      }
+      dispatch(setProducts(data));
     });
-  }, []);
+  }
+}, []);
+
 
   useEffect(() => {
     const useCase = new GetCategoriesProducts();

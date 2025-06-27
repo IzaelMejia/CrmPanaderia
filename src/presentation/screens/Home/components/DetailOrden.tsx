@@ -8,8 +8,11 @@ import {
 import React from "react";
 import { Minus, Plus } from "lucide-react-native";
 import { Colors } from "@constants/Colors";
+import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
 
 export const DetailOrden = () => {
+  const { orders } = useAppSelector((state) => state.orders);
+  
   return (
     <>
       <View className="border-b-hairline border-b-gray-500">
@@ -26,7 +29,10 @@ export const DetailOrden = () => {
                 className="h-16 bg-slate-900 rounded-md "
                 style={{ width: "24%" }}
               ></View>
-              <View className="pl-1 gap-2" style={{ width: "76%" }}>
+              <View
+                className="pl-1 gap-2"
+                style={{ width: "76%" }}
+              >
                 <Text className="text-base">Concha</Text>
                 <View className="d-flex flex-row justify-between ">
                   <View className=" w-full d-flex flex-row justify-between items-center">
@@ -59,7 +65,10 @@ export const DetailOrden = () => {
                   className="rounded-full  bg-primary items-center justify-center"
                   style={styles.touchableIncrement}
                 >
-                  <Plus size={14} color={Colors.white} />
+                  <Plus
+                    size={14}
+                    color={Colors.white}
+                  />
                 </TouchableOpacity>
               </View>
               <TouchableOpacity

@@ -13,7 +13,7 @@ import { Product } from "@src/domain/entities/product.entity";
 import { Minus, Plus } from "lucide-react-native";
 import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
 
-type CardProps = Pick<Product, "name" | "tipo" | "price">;
+type CardProps = Pick<Product, "name" | "tipo" | "price" | "id">;
 
 interface ProductCardsProps {
   data: Product[];
@@ -43,7 +43,11 @@ export const ProductCards: FC<ProductCardsProps> = ({
     setContainerWidth(event.nativeEvent.layout.width);
   }, []);
 
-  const Card: FC<CardProps> = ({ name, tipo, price }) => {
+  const addProduct = (item: CardProps) => {
+    console.log("item", item);
+  };
+
+  const Card: FC<CardProps> = ({ name, tipo, price, id }) => {
     return (
       <View
         style={[
@@ -96,6 +100,14 @@ export const ProductCards: FC<ProductCardsProps> = ({
               <Plus
                 size={14}
                 color={Colors.white}
+                onPress={() => {
+                  addProduct({
+                    id: id,
+                    name: name,
+                    tipo: tipo,
+                    price: price,
+                  });
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -132,6 +144,7 @@ export const ProductCards: FC<ProductCardsProps> = ({
             data={data}
             renderItem={({ item }) => (
               <Card
+                id={item.id}
                 name={item.name}
                 price={item.price}
                 tipo={item.tipo}
