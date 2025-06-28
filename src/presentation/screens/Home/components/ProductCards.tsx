@@ -1,24 +1,15 @@
-import {
-  FlatList,
-  LayoutChangeEvent,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native";
+// ProductCards.tsx
 import React, { FC, useCallback, useMemo, useState } from "react";
-import { Colors } from "@constants/Colors";
-import { Product, ProductForOrder } from "@src/domain/entities/product.entity";
-import { Minus, Plus } from "lucide-react-native";
-import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
+import { FlatList, LayoutChangeEvent, StyleSheet, View } from "react-native";
 import {
   useAppDispatch,
   useAppSelector,
 } from "@src/infrastructure/store/hooks/reduxActions";
 import { addProductToOrder } from "@src/infrastructure/store/Order/OrderSlice";
-
-type CardProps = Pick<Product, "name" | "tipo" | "price" | "id">;
+import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
+import { ProductCard } from "./ProductCard"; // Importa el nuevo componente
+import { Product, ProductForOrder } from "@src/domain/entities/product.entity";
+import { Colors } from "@constants/Colors";
 
 interface ProductCardsProps {
   data: Product[];
@@ -35,132 +26,36 @@ export const ProductCards: FC<ProductCardsProps> = ({
   const currentItems = useAppSelector((state) => state.orders.currentItems);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  const CARD_WIDTH = 176 + 16;
-
+  const CARD_WIDTH = 192; // 176 + 16
   const numColumns = useMemo(
     () => Math.max(1, Math.floor(containerWidth / CARD_WIDTH)),
     [containerWidth]
-  );
-
-  const skeletonData = useMemo(
-    () => Array.from({ length: 6 }, (_, i) => i.toString()),
-    []
   );
 
   const handleLayout = useCallback((event: LayoutChangeEvent) => {
     setContainerWidth(event.nativeEvent.layout.width);
   }, []);
 
-  const addProduct = (product: ProductForOrder, quantity: number) => {
-    dispatch(addProductToOrder({ product, quantity }));
+  const skeletonData = useMemo(
+    () => Array.from({ length: 6 }, (_, i) => i.toString()),
+    []
+  );
+
+  const getQuantity = (id: number) =>
+    currentItems.find((item) => item.product.id === id)?.quantity || 0;
+
+  const addProduct = (product: ProductForOrder, qty = 1) => {
+    dispatch(addProductToOrder({ product, quantity: qty }));
   };
-
-  const Card: FC<CardProps> = ({ name, tipo, price, id }) => {
-    const quantity =
-      currentItems.find((item) => item.product.id === id)?.quantity || 0;
-    return (
-      <View
-        style={[
-          styles.cardContainer,
-          quantity ? styles.borderActive : undefined,
-        ]}
-      >
-        <View>
-          <View style={styles.imgContainer}></View>
-          <Text
-            style={styles.title}
-            numberOfLines={2}
-            ellipsizeMode="tail"
-          >
-            {name}
-          </Text>
-          <View style={styles.priceCategory}>
-            <Text style={styles.price}>
-              ${Number(price).toLocaleString("en-US")}
-            </Text>
-            <Text style={styles.category}>{tipo.name}</Text>
-          </View>
-        </View>
-        {quantity === 0 ? (
-          <TouchableOpacity
-            style={styles.btnAgregar}
-            onPress={() => {
-              addProduct(
-                {
-                  id: id,
-                  name: name,
-                  price: price,
-                },
-                1
-              );
-            }}
-          >
-            <Text style={styles.textAgregar}>Agregar</Text>
-          </TouchableOpacity>
-        ) : (
-          <View
-            style={[
-              styles.btnAgregar,
-              {
-                backgroundColor:
-                  unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
-              },
-            ]}
-          >
-            <View style={styles.contentIncrement}>
-              <TouchableOpacity
-                style={[
-                  styles.btnIncremet,
-                  {
-                    backgroundColor:
-                      unit === "Pieza" ? Colors.primary : Colors.rojo,
-                  },
-                ]}
-              >
-                <Minus
-                  size={14}
-                  color={Colors.white}
-                />
-              </TouchableOpacity>
-              <Text style={styles.textIncremet}>{quantity}</Text>
-              <TouchableOpacity
-                style={[
-                  styles.btnIncremet,
-                  {
-                    backgroundColor:
-                      unit === "Pieza" ? Colors.primary : Colors.rojo,
-                  },
-                ]}
-                onPress={() => {
-                  addProduct(
-                    {
-                      id: id,
-                      name: name,
-                      price: price,
-                    },
-                    1
-                  );
-                }}
-              >
-                <Plus
-                  size={14}
-                  color={Colors.white}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-
-        {/*  */}
-      </View>
-    );
+  const handleSubtract = (product: ProductForOrder) => {
+    const currentQty = getQuantity(product.id);
+    if (currentQty > 0) {
+      dispatch(addProductToOrder({ product, quantity: -1 }));
+    }
   };
 
   return (
-    <View
-      className="d-flex flex-row"
-      onLayout={handleLayout}
-    >
+    <View onLayout={handleLayout}>
       {containerWidth > 0 &&
         (loading ? (
           <FlatList
@@ -180,11 +75,12 @@ export const ProductCards: FC<ProductCardsProps> = ({
           <FlatList
             data={data}
             renderItem={({ item }) => (
-              <Card
-                id={item.id}
-                name={item.name}
-                price={item.price}
-                tipo={item.tipo}
+              <ProductCard
+                product={item}
+                quantity={getQuantity(item.id)}
+                unit={unit}
+                onAdd={(qty) => addProduct(item, qty)}
+                onSubtract={() => handleSubtract(item)}
               />
             )}
             keyExtractor={(item) => item.id.toString()}
@@ -211,6 +107,10 @@ const styles = StyleSheet.create({
   },
   borderActive: {
     borderColor: Colors.primary,
+    borderWidth: 1,
+  },
+  borderActiveRed: {
+    borderColor: Colors.rojo,
     borderWidth: 1,
   },
   imgContainer: {
@@ -254,7 +154,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
     borderRadius: 6,
     paddingHorizontal: 15,
-    backgroundColor: Colors.green_2,
   },
   contentIncrement: {
     width: "100%",

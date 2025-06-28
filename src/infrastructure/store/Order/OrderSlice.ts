@@ -41,10 +41,19 @@ export const orderSlice = createSlice({
       );
       if (existing) {
         existing.quantity += quantity;
-      } else {
+
+        if (existing.quantity <= 0) {
+          //lo quitamos si llega a 0
+          state.currentItems = state.currentItems.filter(
+            (item) => item.product.id != product.id
+          );
+        }
+      } else if (quantity > 0) {
+        //sino lo agregamos
         state.currentItems.push({ product, quantity });
       }
       state.total = state.currentItems.reduce(
+        //calculamos total de todos los productos
         (sum, item) => sum + item.product.price * item.quantity,
         0
       );
