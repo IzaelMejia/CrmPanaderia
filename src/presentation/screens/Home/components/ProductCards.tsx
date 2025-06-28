@@ -9,9 +9,14 @@ import {
 } from "react-native";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { Colors } from "@constants/Colors";
-import { Product } from "@src/domain/entities/product.entity";
+import { Product, ProductForOrder } from "@src/domain/entities/product.entity";
 import { Minus, Plus } from "lucide-react-native";
 import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@src/infrastructure/store/hooks/reduxActions";
+import { addProductToOrder } from "@src/infrastructure/store/Order/OrderSlice";
 
 type CardProps = Pick<Product, "name" | "tipo" | "price" | "id">;
 
@@ -26,8 +31,11 @@ export const ProductCards: FC<ProductCardsProps> = ({
   loading = false,
   unit,
 }) => {
-  const CARD_WIDTH = 176 + 16;
+  const dispatch = useAppDispatch();
+  const currentItems = useAppSelector((state) => state.orders.currentItems);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const CARD_WIDTH = 176 + 16;
 
   const numColumns = useMemo(
     () => Math.max(1, Math.floor(containerWidth / CARD_WIDTH)),
@@ -43,78 +51,107 @@ export const ProductCards: FC<ProductCardsProps> = ({
     setContainerWidth(event.nativeEvent.layout.width);
   }, []);
 
-  const addProduct = (item: CardProps) => {
-    console.log("item", item);
+  const addProduct = (product: ProductForOrder, quantity: number) => {
+    dispatch(addProductToOrder({ product, quantity }));
   };
 
   const Card: FC<CardProps> = ({ name, tipo, price, id }) => {
+    const quantity =
+      currentItems.find((item) => item.product.id === id)?.quantity || 0;
     return (
       <View
         style={[
           styles.cardContainer,
-          //   { borderColor: Colors.primary, borderWidth: 1 },
+          quantity ? styles.borderActive : undefined,
         ]}
       >
-        <View style={styles.imgContainer}></View>
-        <Text style={styles.title}>{name}</Text>
-        <View style={styles.priceCategory}>
-          <Text style={styles.price}>
-            ${Number(price).toLocaleString("en-US")}
+        <View>
+          <View style={styles.imgContainer}></View>
+          <Text
+            style={styles.title}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {name}
           </Text>
-          <Text style={styles.category}>{tipo.name}</Text>
-        </View>
-        <View
-          style={[
-            styles.btnAgregar,
-            {
-              backgroundColor:
-                unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
-            },
-          ]}
-        >
-          <View style={styles.contentIncrement}>
-            <TouchableOpacity
-              style={[
-                styles.btnIncremet,
-                {
-                  backgroundColor:
-                    unit === "Pieza" ? Colors.primary : Colors.rojo,
-                },
-              ]}
-            >
-              <Minus
-                size={14}
-                color={Colors.white}
-              />
-            </TouchableOpacity>
-            <Text style={styles.textIncremet}>2</Text>
-            <TouchableOpacity
-              style={[
-                styles.btnIncremet,
-                {
-                  backgroundColor:
-                    unit === "Pieza" ? Colors.primary : Colors.rojo,
-                },
-              ]}
-            >
-              <Plus
-                size={14}
-                color={Colors.white}
-                onPress={() => {
-                  addProduct({
-                    id: id,
-                    name: name,
-                    tipo: tipo,
-                    price: price,
-                  });
-                }}
-              />
-            </TouchableOpacity>
+          <View style={styles.priceCategory}>
+            <Text style={styles.price}>
+              ${Number(price).toLocaleString("en-US")}
+            </Text>
+            <Text style={styles.category}>{tipo.name}</Text>
           </View>
         </View>
-        {/* <TouchableOpacity style={styles.btnAgregar}>
-          <Text style={styles.textAgregar}>Agregar</Text>
-        </TouchableOpacity> */}
+        {quantity === 0 ? (
+          <TouchableOpacity
+            style={styles.btnAgregar}
+            onPress={() => {
+              addProduct(
+                {
+                  id: id,
+                  name: name,
+                  price: price,
+                },
+                1
+              );
+            }}
+          >
+            <Text style={styles.textAgregar}>Agregar</Text>
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={[
+              styles.btnAgregar,
+              {
+                backgroundColor:
+                  unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
+              },
+            ]}
+          >
+            <View style={styles.contentIncrement}>
+              <TouchableOpacity
+                style={[
+                  styles.btnIncremet,
+                  {
+                    backgroundColor:
+                      unit === "Pieza" ? Colors.primary : Colors.rojo,
+                  },
+                ]}
+              >
+                <Minus
+                  size={14}
+                  color={Colors.white}
+                />
+              </TouchableOpacity>
+              <Text style={styles.textIncremet}>{quantity}</Text>
+              <TouchableOpacity
+                style={[
+                  styles.btnIncremet,
+                  {
+                    backgroundColor:
+                      unit === "Pieza" ? Colors.primary : Colors.rojo,
+                  },
+                ]}
+                onPress={() => {
+                  addProduct(
+                    {
+                      id: id,
+                      name: name,
+                      price: price,
+                    },
+                    1
+                  );
+                }}
+              >
+                <Plus
+                  size={14}
+                  color={Colors.white}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {/*  */}
       </View>
     );
   };
@@ -170,6 +207,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     boxShadow: "4px 2px 4px 1px #00000020",
     backgroundColor: "#e8e5e5",
+    justifyContent: "space-between",
+  },
+  borderActive: {
+    borderColor: Colors.primary,
+    borderWidth: 1,
   },
   imgContainer: {
     width: "100%",
@@ -212,6 +254,7 @@ const styles = StyleSheet.create({
     marginTop: 7,
     borderRadius: 6,
     paddingHorizontal: 15,
+    backgroundColor: Colors.green_2,
   },
   contentIncrement: {
     width: "100%",
