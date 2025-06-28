@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Minus, Plus } from "lucide-react-native";
 import { Colors } from "@constants/Colors";
 import { Product } from "@src/domain/entities/product.entity";
+import { Image } from "expo-image";
 
 interface ProductCardProps {
   product: Product;
@@ -31,7 +32,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     ]}
   >
     <View>
-      <View style={styles.imgContainer}></View>
+      <View style={styles.imgContainer}>
+        <Image source={product.image} style={styles.img} />
+      </View>
       <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
         {product.name}
       </Text>
@@ -103,7 +106,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 6,
     boxShadow: "4px 2px 4px 1px #00000020",
-    backgroundColor: "#e8e5e5",
+    // backgroundColor: "#e8e5e5",
+    backgroundColor: "#fff",
     justifyContent: "space-between",
   },
   borderActive: {
@@ -117,7 +121,12 @@ const styles = StyleSheet.create({
   imgContainer: {
     width: "100%",
     height: 104,
-    backgroundColor: "green",
+    backgroundColor: Colors.gray_1,
+    borderRadius: 6,
+  },
+  img: {
+    width: "100%",
+    height: "100%",
     borderRadius: 6,
   },
   title: {

@@ -34,15 +34,14 @@ export const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-  const useCase = new GetProductsUseCase();
-  if (products.length <= 0) {
-    dispatch(setLoading()); 
-    useCase.execute().then((data) => {
-      dispatch(setProducts(data));
-    });
-  }
-}, []);
-
+    const useCase = new GetProductsUseCase();
+    if (products.length <= 0) {
+      dispatch(setLoading());
+      useCase.execute().then((data) => {
+        dispatch(setProducts(data));
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const useCase = new GetCategoriesProducts();
@@ -60,8 +59,9 @@ export const HomeScreen = () => {
     if (selectedCategory !== null) {
       result = result.filter((p) => p.Category?.id === selectedCategory.id);
     }
+
     if (unit) {
-      result = result.filter((p) => p.unidad?.some((u) => u.name === unit));
+      result = result.filter((p) => p.unidad?.name === unit);
     }
     return result;
   }, [products, selectedCategory, unit]);
@@ -76,14 +76,8 @@ export const HomeScreen = () => {
   }, [filteredProducts]);
 
   return (
-    <View
-      className="flex-1 flex flex-row"
-      style={styles.container}
-    >
-      <View
-        style={styles.containerLeft}
-        className=" p-4"
-      >
+    <View className="flex-1 flex flex-row" style={styles.container}>
+      <View style={styles.containerLeft} className=" p-4">
         <View className="d-flex flex-row items-center gap-5">
           <TouchDrawer />
           <InputSearch

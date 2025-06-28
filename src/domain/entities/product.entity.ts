@@ -7,11 +7,12 @@ export interface Product {
   name: string;
   tipo: TypeBread;
   price: number;
-  unidad?: UnidadProduct[];
+  unidad?: UnidadProduct;
   Category?: CategoriesProducts;
   descripcion?: string;
   createdAt?: string;
   updatedAt?: string;
+  image: string;
 }
 
 export type ProductForOrder = Pick<Product, "id" | "name" | "price" >;
