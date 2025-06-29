@@ -1,20 +1,26 @@
 import {
   FlatList,
   ListRenderItemInfo,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import React from "react";
-import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@src/infrastructure/store/hooks/reduxActions";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DetailCardOrden } from "./DetailCardOrden";
 import { Product } from "@src/domain/entities/product.entity";
+import { BrushCleaning } from "lucide-react-native";
+import { Colors } from "@constants/Colors";
+import { cleanOrder } from "@src/infrastructure/store/Order/OrderSlice";
 
 export const DetailOrden = () => {
+  const dispatch = useAppDispatch();
   const { currentItems, total } = useAppSelector((state) => state.orders);
   const totalProductosPiezas = currentItems
     .filter((item) => item.product.unidad?.id === 1)
@@ -29,10 +35,17 @@ export const DetailOrden = () => {
     <DetailCardOrden item={item} />
   );
 
+  const CleanOrder = () => {
+    dispatch(cleanOrder());
+  };
+
   return (
     <GestureHandlerRootView>
-      <View className="border-b-hairline border-b-gray-500">
+      <View className="border-b-hairline border-b-gray-500 flex flex-row justify-between items-center">
         <Text className="text-lg font-medium">Detalles de la Orden</Text>
+        <TouchableOpacity onPress={CleanOrder}>
+          <BrushCleaning width={22} height={22} color={Colors.rojo} />
+        </TouchableOpacity>
       </View>
       <View className="d-flex gap-1 mt-3 flex-row justify-between">
         <Text className="text-base">

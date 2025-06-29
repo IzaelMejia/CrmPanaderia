@@ -48,7 +48,7 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
           <View className="d-flex flex-row items-center ">
             <View
               className="h-16 bg-slate-900 rounded-md "
-              style={{ width: "24%" }}
+              style={{ width: 64, height: 64 }}
             >
               <Image
                 source={product.image}
@@ -57,8 +57,8 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
                 cachePolicy="memory-disk"
               />
             </View>
-            <View className="pl-2 gap-2" style={{ width: "76%" }}>
-              <Text className="text-lg font-semibold">
+            <View className="pl-2 gap-2" style={{ flex: 1 }}>
+              <Text className="text-lg font-semibold" numberOfLines={2} ellipsizeMode="tail">
                 {product.unidad?.name} {product.name}
               </Text>
               <View className="d-flex flex-row justify-between ">

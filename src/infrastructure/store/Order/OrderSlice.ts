@@ -67,6 +67,10 @@ export const orderSlice = createSlice({
         0
       );
     },
+    cleanOrder: (state) => {
+      state.currentItems = [];
+      state.total = 0;
+    },
   },
 });
 
@@ -75,4 +79,5 @@ export const {
   addOrder,
   addProductToOrder,
   removeProductFromOrder,
+  cleanOrder
 } = orderSlice.actions;
