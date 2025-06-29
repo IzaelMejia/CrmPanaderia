@@ -19,7 +19,14 @@ export const InfoSwitch: FC<InfoSwitchProps> = ({
     <>
       <View>
         <Text className="text-black_1 text-3xl font-extrabold">
-          {nameCategory} <Text className="text-sm">({totalProducts})</Text>
+          <Text
+            style={{
+              color: unitSelected === "Pieza" ? Colors.primary : Colors.rojo,
+            }}
+          >
+            {unitSelected}s
+          </Text>{" "}
+          de {nameCategory} <Text className="text-sm">({totalProducts})</Text>
         </Text>
       </View>
       <View className="d-flex flex-row">

@@ -15,4 +15,3 @@ export interface Product {
   image: string;
 }
 
-export type ProductForOrder = Pick<Product, "id" | "name" | "price" >;

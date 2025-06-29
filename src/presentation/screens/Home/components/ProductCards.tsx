@@ -8,7 +8,7 @@ import {
 import { addProductToOrder } from "@src/infrastructure/store/Order/OrderSlice";
 import { SkeletonPlaceholder } from "@src/presentation/components/SkeletonPlaceholder/SkeletonPlaceholder";
 import { ProductCard } from "./ProductCard"; // Importa el nuevo componente
-import { Product, ProductForOrder } from "@src/domain/entities/product.entity";
+import { Product } from "@src/domain/entities/product.entity";
 import { Colors } from "@constants/Colors";
 
 interface ProductCardsProps {
@@ -44,10 +44,10 @@ export const ProductCards: FC<ProductCardsProps> = ({
   const getQuantity = (id: number) =>
     currentItems.find((item) => item.product.id === id)?.quantity || 0;
 
-  const addProduct = (product: ProductForOrder, qty = 1) => {
+  const addProduct = (product: Product, qty = 1) => {
     dispatch(addProductToOrder({ product, quantity: qty }));
   };
-  const handleSubtract = (product: ProductForOrder) => {
+  const handleSubtract = (product: Product) => {
     const currentQty = getQuantity(product.id);
     if (currentQty > 0) {
       dispatch(addProductToOrder({ product, quantity: -1 }));

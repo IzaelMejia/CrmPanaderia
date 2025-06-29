@@ -1,8 +1,8 @@
-import { Product, ProductForOrder } from "./product.entity";
+import { Product } from "./product.entity";
 
 
 export interface OrderItem {
-  product: ProductForOrder;
+  product: Product;
   quantity: number;
 }
 

@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   cardSelected: {
-    backgroundColor: "rgba(3, 140, 37, 0.40)",
+    backgroundColor: "red",
     opacity: 0.4,
   },
   imgs: {

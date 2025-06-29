@@ -33,14 +33,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   >
     <View>
       <View style={styles.imgContainer}>
-        <Image source={product.image} style={styles.img} />
+        <Image
+          source={product.image}
+          style={styles.img}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+        />
       </View>
       <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
         {product.name}
       </Text>
       <View style={styles.priceCategory}>
-        <Text style={styles.price}>
-          ${Number(product.price).toLocaleString("en-US")}
+        <Text
+          style={[
+            styles.price,
+            { color: unit === "Pieza" ? Colors.primary : Colors.rojo },
+          ]}
+        >
+          ${product.price}.00
         </Text>
         <Text style={styles.category}>{product.tipo.name}</Text>
       </View>
@@ -112,17 +122,18 @@ const styles = StyleSheet.create({
   },
   borderActive: {
     borderColor: Colors.primary,
-    borderWidth: 1,
+    borderWidth: 2,
   },
   borderActiveRed: {
     borderColor: Colors.rojo,
-    borderWidth: 1,
+    borderWidth: 2,
   },
   imgContainer: {
     width: "100%",
     height: 104,
     backgroundColor: Colors.gray_1,
     borderRadius: 6,
+    overflow: "hidden",
   },
   img: {
     width: "100%",

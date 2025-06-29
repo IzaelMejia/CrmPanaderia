@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order, OrderItem } from "@src/domain/entities/order.entity";
-import { ProductForOrder } from "@src/domain/entities/product.entity";
+import { Product } from "@src/domain/entities/product.entity";
 
 interface OrderState {
   orders: Order[];
@@ -33,7 +33,7 @@ export const orderSlice = createSlice({
     },
     addProductToOrder: (
       state,
-      action: PayloadAction<{ product: ProductForOrder; quantity?: number }>
+      action: PayloadAction<{ product: Product; quantity?: number }>
     ) => {
       const { product, quantity = 1 } = action.payload;
       const existing = state.currentItems.find(
@@ -58,8 +58,21 @@ export const orderSlice = createSlice({
         0
       );
     },
+    removeProductFromOrder: (state, action: PayloadAction<number>) => {
+      state.currentItems = state.currentItems.filter(
+        (item) => item.product.id !== action.payload
+      );
+      state.total = state.currentItems.reduce(
+        (sum, item) => sum + item.product.price * item.quantity,
+        0
+      );
+    },
   },
 });
 
-export const { setLoadingOrder, addOrder, addProductToOrder } =
-  orderSlice.actions;
+export const {
+  setLoadingOrder,
+  addOrder,
+  addProductToOrder,
+  removeProductFromOrder,
+} = orderSlice.actions;
