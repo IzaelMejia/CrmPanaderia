@@ -19,7 +19,7 @@ interface AuthState {
 const initialState: AuthState = {
   status: "not-authenticated",
   user: null,
-  logged: true,
+  logged: false,
   permission: [],
 };
 
@@ -34,6 +34,8 @@ export const authSlice = createSlice({
       state.logged = false;
     },
     onLogin: (state, { payload }) => {
+      console.log("onLogin PayLoad:", payload);
+      
       state.status = "authenticated";
       state.user = payload;
       state.permission = payload.PermisosPerfil || [];
@@ -50,9 +52,6 @@ export const authSlice = createSlice({
 
     clearErrorMessage: (state) => {
       state.errorMessage = undefined;
-      state.user = {};
-      state.permission = [];
-      state.logged = false;
     },
     onLoginAuth: (state) => {
       state.status = "authenticated";

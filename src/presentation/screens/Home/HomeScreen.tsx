@@ -23,6 +23,8 @@ import {
 
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
+  console.log("logged", logged);
+  
   const { products, isLoading } = useAppSelector((state) => state.products);
   // const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoriesProducts[]>([]);
