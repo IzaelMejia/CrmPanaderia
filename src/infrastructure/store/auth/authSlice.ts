@@ -10,7 +10,7 @@ export type AuthStatus =
 
 interface AuthState {
   status: AuthStatus;
-  user: User | null | object;
+  user: User | null;
   errorMessage?: string;
   logged: boolean;
   permission: Permission[];
@@ -29,13 +29,11 @@ export const authSlice = createSlice({
   reducers: {
     onChecking: (state) => {
       state.status = "checking";
-      state.user = {};
+      state.user = null;
       state.errorMessage = undefined;
       state.logged = false;
     },
     onLogin: (state, { payload }) => {
-      console.log("onLogin PayLoad:", payload);
-      
       state.status = "authenticated";
       state.user = payload;
       state.permission = payload.PermisosPerfil || [];
@@ -44,7 +42,7 @@ export const authSlice = createSlice({
     },
     onLogout: (state) => {
       state.status = "not-authenticated";
-      state.user = {};
+      state.user = null;
       state.permission = [];
       state.errorMessage = undefined;
       state.logged = false;

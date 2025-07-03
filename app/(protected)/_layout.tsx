@@ -7,18 +7,27 @@ import {
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { House, LogOut, NotepadText } from "lucide-react-native";
+import { Croissant, House, LogOut, NotepadText } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useAppDispatch } from "@src/infrastructure/store/hooks/reduxActions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@src/infrastructure/store/hooks/reduxActions";
 import { onLogout } from "@src/infrastructure/store/auth/authSlice";
 import { Colors } from "@constants/Colors";
+import { useRouter } from "expo-router";
+
+// const { user } = useAppSelector((state) => state.auth);
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const handleLogout = () => {
     dispatch(onLogout());
+    router.navigate("/(auth)/login");
   };
 
   return (
@@ -39,6 +48,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 }
 
 export default function _layout() {
+  const { user } = useAppSelector((state) => state.auth);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -69,6 +80,19 @@ export default function _layout() {
             ),
           }}
         />
+
+        <Drawer.Protected guard={user?.roleId === 0}>
+          <Drawer.Screen
+            name="productos"
+            options={{
+              drawerLabel: "Productos",
+              title: "Productos",
+              drawerIcon: ({ size, color }) => (
+                <Croissant color={color} size={size} />
+              ),
+            }}
+          />
+        </Drawer.Protected>
       </Drawer>
     </GestureHandlerRootView>
   );
