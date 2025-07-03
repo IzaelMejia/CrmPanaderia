@@ -25,11 +25,8 @@ export function InputSearch({
   const internalRef = useRef<TextInput>(null);
   useImperativeHandle(externalRef, () => internalRef.current!, []);
 
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // useCallback memoriza funcion para que no se re-crean en cada render
   const emitChange = useCallback(
-    (text: string) => onChangeText(text), // llamado directo
+    (text: string) => onChangeText(text),
     [onChangeText]
   );
 
@@ -71,7 +68,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
     maxWidth: 500,
-    fontSize: 22
+    fontSize: 22,
   },
   input: {
     fontSize: 16,

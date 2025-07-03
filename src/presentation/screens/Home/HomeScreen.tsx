@@ -62,8 +62,13 @@ export const HomeScreen = () => {
     if (unit) {
       result = result.filter((p) => p.unidad?.name === unit);
     }
+    if (query.trim() !== "") {
+      const lowerQuery = query.toLowerCase().trim();
+      result = result.filter((p) => p.name.toLowerCase().includes(lowerQuery));
+    }
+
     return result;
-  }, [products, selectedCategory, unit]);
+  }, [products, selectedCategory, unit, query]);
 
   const totalProducts = useMemo(() => {
     return filteredProducts?.length;

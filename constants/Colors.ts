@@ -10,6 +10,7 @@ export const Colors = {
   gray_1: "#8B7F7F",
   black: "#000000",
   black_1: "#2D2D2D",
+  black_2: "#272727",
   white: "#FFFFFF",
   white_1: "#EDEDED",
   opacity: "rgba(0, 0, 0, 0.5)",
