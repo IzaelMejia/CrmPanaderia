@@ -11,7 +11,6 @@ import {
   useAppSelector,
 } from "@src/infrastructure/store/hooks/reduxActions";
 import { CategoriesCards } from "./components/CategoriesCards";
-import { Product } from "@src/domain/entities/product.entity";
 import { ProductCards } from "./components/ProductCards";
 import { DetailOrden } from "./components/DetailOrden";
 import { InfoSwitch } from "./components/InfoSwitch";

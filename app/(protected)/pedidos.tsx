@@ -3,18 +3,12 @@ import { PedidosScreen } from "@src/presentation/screens/Pedidos/PedidosScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Colors } from "@constants/Colors";
+import { ScreenWrapper } from "components/ScreenWrapper";
 
-export default function HomeRoute() {
+export default function PedidosRoute() {
   return (
-    <>
-      <SafeAreaView
-        style={{
-          backgroundColor: Colors.primary,
-        }}
-      >
-        <StatusBar style="light" backgroundColor="blue" />
-      </SafeAreaView>
+    <ScreenWrapper>
       <PedidosScreen />
-    </>
+    </ScreenWrapper>
   );
 }

@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { AppToast } from "@src/presentation/components/Toast/Toast";
 import { PersistGate } from "redux-persist/integration/react";
+import { Colors } from "@constants/Colors";
 
 export default function _layout() {
   // useEffect(() => {
@@ -24,10 +25,10 @@ export default function _layout() {
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaView
           style={{
-            backgroundColor: "red",
+            backgroundColor: Colors.primary,
           }}
         >
-          <StatusBar style="light" backgroundColor="blue" />
+          <StatusBar style="light"  />
         </SafeAreaView>
         <Stack
           screenOptions={{
