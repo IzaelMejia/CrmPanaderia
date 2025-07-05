@@ -13,6 +13,7 @@ import { Image } from "expo-image";
 import { Plus, SquarePen, Trash } from "lucide-react-native";
 import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
 import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
+import { ModalAdd } from "@src/presentation/components/ModalAdd/ModalAdd";
 
 export const ProductsScreen = () => {
   const { products } = useAppSelector((state) => state.products);
@@ -166,6 +167,10 @@ export const ProductsScreen = () => {
           </DataTable>
         </ScrollView>
       </View>
+
+      <ModalAdd
+        open={true}
+      ></ModalAdd>
     </View>
   );
 };
