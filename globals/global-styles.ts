@@ -37,6 +37,7 @@ export const globalStyles = StyleSheet.create({
     fontSize: 14,
     top: -11,
     left: 9,
+    zIndex: 2
   },
   txtActive: {
     color: Colors.primary,

@@ -17,6 +17,8 @@ import { ModalAdd } from "@src/presentation/components/ModalAdd/ModalAdd";
 
 export const ProductsScreen = () => {
   const { products } = useAppSelector((state) => state.products);
+  const [openModalAddProduct, setOpenModalAddProduct] = useState<boolean>(false);
+
   // Paginación
   const [page, setPage] = useState<number>(0);
   const [numberOfItemsPerPageList] = useState([10, 20, 50]);
@@ -63,7 +65,9 @@ export const ProductsScreen = () => {
           placeholder="Buscar producto..."
         />
 
-        <TouchableOpacity className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md">
+        <TouchableOpacity className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md"
+          onPress={()=> setOpenModalAddProduct(true)}
+        >
           <View className="d-flex flex-row items-center justify-center gap-2">
             <Plus width={20} height={20} color={Colors.white} />
             <Text className="text-white font-semibold text-base">
@@ -169,7 +173,8 @@ export const ProductsScreen = () => {
       </View>
 
       <ModalAdd
-        open={true}
+        open={openModalAddProduct}
+        close= {()=> setOpenModalAddProduct(false)}
       ></ModalAdd>
     </View>
   );
