@@ -16,14 +16,16 @@ import { DetailOrden } from "./components/DetailOrden";
 import { InfoSwitch } from "./components/InfoSwitch";
 import { Colors } from "@constants/Colors";
 import {
+  setCategories,
   setLoading,
   setProducts,
 } from "@src/infrastructure/store/products/productsSlice";
 
 export const HomeScreen = () => {
   const { logged, permission, user } = useAppSelector((state) => state.auth);
-  const { products, isLoading } = useAppSelector((state) => state.products);
-  const [categories, setCategories] = useState<CategoriesProducts[]>([]);
+  const { products, categoryProduct, isLoading } = useAppSelector(
+    (state) => state.products
+  );
   const [unit, setUnit] = useState<"Pieza" | "Bolsa">("Pieza");
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] =
@@ -44,7 +46,8 @@ export const HomeScreen = () => {
   useEffect(() => {
     const useCase = new GetCategoriesProducts();
     useCase.execute().then((data) => {
-      setCategories(data);
+      // setCategories(data);
+      dispatch(setCategories(data));
     });
   }, []);
 
@@ -92,7 +95,7 @@ export const HomeScreen = () => {
         </View>
         <View className="mt-8">
           <CategoriesCards
-            data={categories}
+            data={categoryProduct}
             selectedCategory={selectedCategory}
             onSelect={setSelectedCategory}
           />

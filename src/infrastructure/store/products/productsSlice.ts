@@ -34,7 +34,13 @@ export const productsSlice = createSlice({
       state.isLoading = false;
       state.errorMessage = "";
     },
+    setCategories: (state, action) => {
+      state.categoryProduct = action.payload;
+    },
+    onSetProduct: (state, { payload }) => {
+      state.product = { ...payload };
+    },
   },
 });
 
-export const { setLoading, setProducts } = productsSlice.actions;
+export const { setLoading, setProducts, setCategories, onSetProduct } = productsSlice.actions;

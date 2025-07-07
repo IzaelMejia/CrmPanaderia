@@ -30,10 +30,6 @@ export function InputSearch({
     [onChangeText]
   );
 
-  const handleSubmit = (
-    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
-  ) => onSubmit?.(e.nativeEvent.text);
-
   return (
     <View style={styles.container}>
       <Search size={24} color={Colors.gray_1} style={{ marginRight: 6 }} />
@@ -44,7 +40,6 @@ export function InputSearch({
         placeholder={placeholder}
         placeholderTextColor={Colors.gray_1}
         onChangeText={emitChange}
-        onSubmitEditing={handleSubmit}
         returnKeyType="search"
         autoFocus={false}
         autoCapitalize="none"

@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import React, { FC, useRef, useState } from "react";
-import { Feather } from "lucide-react-native";
+import { ChevronDown, ChevronUp, Feather } from "lucide-react-native";
 import { globalStyles } from "@globals/global-styles";
 import { Colors } from "@constants/Colors";
 import { TypeBread } from "@src/domain/entities/types-bread.entity";
@@ -19,10 +19,14 @@ import { TypeBread } from "@src/domain/entities/types-bread.entity";
 interface InputSelectorProps {
   label: string;
   placeholder?: string;
-//   options: TypeBread[];
+  options: TypeBread[];
 }
 
-export const InputSelector: FC <InputSelectorProps> = ({label = "Dulce/salado", placeholder ="Ejemplo"}) => {
+export const InputSelector: FC<InputSelectorProps> = ({
+  label,
+  placeholder = "Ejemplo",
+  options,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [activeInput, setActiveInput] = useState(false);
   const containerRef = useRef<View | null>(null);
@@ -38,20 +42,20 @@ export const InputSelector: FC <InputSelectorProps> = ({label = "Dulce/salado", 
       containerRef?.current?.measure((x, y, width, height, pageX, pageY) => {
         setPosition({ x: pageX, y: pageY, width, height });
         setModalVisible(true);
-        setActiveInput(true)
+        setActiveInput(true);
       });
     });
   };
 
   return (
-    <View style={styles.container} ref={containerRef}>
+    <View ref={containerRef} className="relative">
       <Text
         style={[
           globalStyles.txtInput,
           activeInput ? globalStyles.txtActive : globalStyles.txtInactive,
         ]}
       >
-        Dulce/Salado
+        {label}
       </Text>
 
       <TouchableOpacity
@@ -59,10 +63,22 @@ export const InputSelector: FC <InputSelectorProps> = ({label = "Dulce/salado", 
         onPress={handleOpen}
         style={[
           globalStyles.inputText,
-          activeInput ? globalStyles.inputTextActive : globalStyles.inputTextInactive,
+          activeInput
+            ? globalStyles.inputTextActive
+            : globalStyles.inputTextInactive,
         ]}
+        className="relative"
       >
-        <Text style={[styles.txtData, styles.txtPlaceHolcer]}>{placeholder}</Text>
+        <Text style={[styles.txtData, styles.txtPlaceHolcer]}>
+          {placeholder}
+        </Text>
+        <View className="absolute right-2 top-3">
+          {!modalVisible ? (
+            <ChevronDown width={24} height={23} color={Colors.gray_1} />
+          ) : (
+            <ChevronUp width={24} height={23} color={Colors.gray_1} />
+          )}
+        </View>
       </TouchableOpacity>
 
       <Modal
@@ -83,15 +99,22 @@ export const InputSelector: FC <InputSelectorProps> = ({label = "Dulce/salado", 
                 },
               ]}
             >
-              <TouchableOpacity
-                style={styles.option}
-                onPress={() => {
-                  //   onValueChange(item.value);
-                  //   setModalVisible(false);
+              <FlatList
+                data={options}
+                renderItem={({ item }) => {
+                  return (
+                    <TouchableOpacity
+                      style={styles.option}
+                      onPress={() => {
+                        //   onValueChange(item.value);
+                        //   setModalVisible(false);
+                      }}
+                    >
+                      <Text style={styles.optionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  );
                 }}
-              >
-                <Text style={styles.optionText}>Ejemplo</Text>
-              </TouchableOpacity>
+              ></FlatList>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -101,9 +124,6 @@ export const InputSelector: FC <InputSelectorProps> = ({label = "Dulce/salado", 
 };
 
 const styles = StyleSheet.create({
-  container: {
-    position: "relative",
-  },
   label: {
     position: "absolute",
   },

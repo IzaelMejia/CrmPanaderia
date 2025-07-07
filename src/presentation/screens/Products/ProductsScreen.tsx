@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import { useAppDispatch, useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
 import { Colors } from "@constants/Colors";
 import { Chip, DataTable } from "react-native-paper";
 import { Image } from "expo-image";
@@ -14,10 +14,17 @@ import { Plus, SquarePen, Trash } from "lucide-react-native";
 import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
 import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
 import { ModalAdd } from "@src/presentation/components/ModalAdd/ModalAdd";
+import { ModalEliminar } from "@src/presentation/components/ModalEliminar/ModalEliminar";
+import { onSetProduct } from "@src/infrastructure/store/products/productsSlice";
+import { Product } from "@src/domain/entities/product.entity";
 
 export const ProductsScreen = () => {
-  const { products } = useAppSelector((state) => state.products);
-  const [openModalAddProduct, setOpenModalAddProduct] = useState<boolean>(false);
+  const dispatch = useAppDispatch()
+  const { products, product } = useAppSelector((state) => state.products);
+  const [openModalAddProduct, setOpenModalAddProduct] =
+    useState<boolean>(false);
+
+  const [openModalEliminar, setOpenModalEliminar] = useState<boolean>(false);
 
   // Paginación
   const [page, setPage] = useState<number>(0);
@@ -29,9 +36,6 @@ export const ProductsScreen = () => {
   const to = Math.min((page + 1) * itemsPerPage, products?.length);
 
   const [query, setQuery] = useState("");
-  const handleSubmit = (text: string) => {
-    console.log("🔍 Buscar:", text);
-  };
 
   useEffect(() => {
     setPage(0);
@@ -48,6 +52,15 @@ export const ProductsScreen = () => {
     return result;
   }, [products, query]);
 
+  const handleModalAdd = (item : Product | null)  => {
+    if(item && item != null){
+      setOpenModalAddProduct(true);
+      dispatch (onSetProduct(item))
+    }else{
+      setOpenModalAddProduct(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View className="d-flex flex-row gap-5 items-center border-b-2 border-b-slate-600 pb-1">
@@ -61,12 +74,12 @@ export const ProductsScreen = () => {
         <InputSearch
           value={query}
           onChangeText={setQuery}
-          onSubmit={handleSubmit}
           placeholder="Buscar producto..."
         />
 
-        <TouchableOpacity className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md"
-          onPress={()=> setOpenModalAddProduct(true)}
+        <TouchableOpacity
+          className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md"
+          onPress={()=>handleModalAdd(null)}
         >
           <View className="d-flex flex-row items-center justify-center gap-2">
             <Plus width={20} height={20} color={Colors.white} />
@@ -137,6 +150,7 @@ export const ProductsScreen = () => {
                   <View style={styles.cellActions}>
                     <TouchableOpacity
                       style={[styles.btnAction, styles.btnEdit]}
+                      onPress={()=>handleModalAdd(item)}
                     >
                       <SquarePen
                         width={"80%"}
@@ -146,6 +160,7 @@ export const ProductsScreen = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.btnAction, styles.btnDelete]}
+                      onPress={() => setOpenModalEliminar(true)}
                     >
                       <Trash
                         width={"80%"}
@@ -174,8 +189,13 @@ export const ProductsScreen = () => {
 
       <ModalAdd
         open={openModalAddProduct}
-        close= {()=> setOpenModalAddProduct(false)}
-      ></ModalAdd>
+        close={() => setOpenModalAddProduct(false)}
+      />
+
+      <ModalEliminar
+        open={openModalEliminar}
+        close={() => setOpenModalEliminar(false)}
+      />
     </View>
   );
 };
