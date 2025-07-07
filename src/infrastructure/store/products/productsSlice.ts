@@ -5,7 +5,7 @@ import { TypeBread } from "@src/domain/entities/types-bread.entity";
 import { UnidadProduct } from "@src/domain/entities/unidadProduct.entity";
 
 interface ProductState {
-  product: Product | null | object;
+  product: Product | undefined;
   products: Product[];
   isLoading: boolean;
   errorMessage: string;
@@ -14,7 +14,7 @@ interface ProductState {
 }
 
 const initialState: ProductState = {
-  product: {},
+  product: undefined,
   products: [],
   tipoPan: {},
   isLoading: false,
@@ -40,6 +40,8 @@ export const productsSlice = createSlice({
     onSetProduct: (state, { payload }) => {
       state.product = { ...payload };
     },
+    deleteProduct: (state, { payload }) => {
+    }
   },
 });
 

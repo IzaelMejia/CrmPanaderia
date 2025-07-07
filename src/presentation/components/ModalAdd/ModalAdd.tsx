@@ -28,64 +28,73 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
   const { categoryProduct, product } = useAppSelector(
     (state) => state.products
   );
-
-  const productId =  product?.id;
+  const productId = product?.id ? true : false;
 
   return (
     <ModalOpacity open={open} close={close}>
-      <ScrollView
-        style={styles.contentData}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      >
-        <Text className="text-3xl text-primary font-bold text-center">
-          Agregar Producto
-        </Text>
+      <View>
+        <ScrollView
+          style={styles.contentData}
+          contentContainerStyle={{ paddingBottom: 50 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text className="text-3xl text-primary font-bold text-center">
+            {productId ? "Actualizar Producto" : "Agregar Producto"}
+          </Text>
 
-        <View style={styles.imgContent}>
-          <InputImage />
-        </View>
-        <View className="mt-7 d-flex flex-col gap-7">
-          <View style={styles.inputNormal}>
-            <InputTextEdit
-              placeholder="Agrega el nombre del pan"
-              label="Nombre"
-            />
+          <View style={styles.imgContent}>
+            <InputImage />
           </View>
-          <View style={styles.inputNormal}>
-            <InputTextEdit
-              placeholder="Agrega el precio del pan"
-              label="Precio"
-            />
-          </View>
+          <View className="mt-7 d-flex flex-col gap-7">
+            <View style={styles.inputNormal}>
+              <InputTextEdit
+                placeholder="Agrega el nombre del pan"
+                label="Nombre"
+                value={productId ? product?.name : undefined}
+                // value={product && 'name' in product ? (product as any).name : ''}
+              />
+            </View>
+            <View style={styles.inputNormal}>
+              <InputTextEdit
+                placeholder="Agrega el precio del pan"
+                label="Precio"
+                value={productId ? String(product?.price) : undefined}
+              />
+            </View>
 
-          <View style={styles.contentInput}>
-            <InputSelector
-              placeholder="Selecciona el tipo de pan"
-              label="Dulce/Salado"
-              options={BREAD_TYPES}
-            />
-          </View>
-          <View style={styles.contentInput}>
-            <InputSelector
-              placeholder="Selecciona la categoría"
-              label="Categoría"
-              options={categoryProduct}
-            />
-          </View>
+            <View style={styles.contentInput}>
+              <InputSelector
+                placeholder="Selecciona el tipo de pan"
+                label="Dulce/Salado"
+                options={BREAD_TYPES}
+              />
+            </View>
+            <View style={styles.contentInput}>
+              <InputSelector
+                placeholder="Selecciona la categoría"
+                label="Categoría"
+                options={categoryProduct}
+              />
+            </View>
 
-          <View style={styles.inputDecription}>
-            <InputTextEdit
-              placeholder="Agrega descripción del pan"
-              label="Descripción"
-            />
+            <View style={styles.inputDecription}>
+              <InputTextEdit
+                placeholder="Agrega descripción del pan"
+                label="Descripción"
+                value={productId ? product?.descripcion : undefined}
+              />
+            </View>
+            <View className="w-full justify-center items-center">
+              <TouchableOpacity className="bg-primary h-14 w-60 justify-center items-center rounded-full">
+                <Text className="color-white text-base font-bold">
+                  {" "}
+                  {productId ? "Actualizar" : "Agregar"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className="w-full justify-center items-center">
-            <TouchableOpacity className="bg-primary h-14 w-60 justify-center items-center rounded-full">
-              <Text className="color-white text-base font-bold">Agregar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </ModalOpacity>
   );
 };
@@ -97,8 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentData: {
-    maxWidth: 400,
-    width: "100%",
+    width: 420,
     paddingHorizontal: 30,
     paddingTop: 30,
     paddingBottom: 100,

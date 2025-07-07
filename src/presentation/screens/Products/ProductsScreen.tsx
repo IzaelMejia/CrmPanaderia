@@ -6,7 +6,10 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "@src/infrastructure/store/hooks/reduxActions";
 import { Colors } from "@constants/Colors";
 import { Chip, DataTable } from "react-native-paper";
 import { Image } from "expo-image";
@@ -19,7 +22,7 @@ import { onSetProduct } from "@src/infrastructure/store/products/productsSlice";
 import { Product } from "@src/domain/entities/product.entity";
 
 export const ProductsScreen = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { products, product } = useAppSelector((state) => state.products);
   const [openModalAddProduct, setOpenModalAddProduct] =
     useState<boolean>(false);
@@ -52,12 +55,13 @@ export const ProductsScreen = () => {
     return result;
   }, [products, query]);
 
-  const handleModalAdd = (item : Product | null)  => {
-    if(item && item != null){
+  const handleModalAdd = (item: Product | null) => {
+    if (item && item != null) {
       setOpenModalAddProduct(true);
-      dispatch (onSetProduct(item))
+      dispatch(onSetProduct(item));
     }else{
-      setOpenModalAddProduct(true);
+      setOpenModalAddProduct(true)
+       dispatch(onSetProduct(null));
     }
   };
 
@@ -79,7 +83,7 @@ export const ProductsScreen = () => {
 
         <TouchableOpacity
           className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md"
-          onPress={()=>handleModalAdd(null)}
+          onPress={() => handleModalAdd(null)}
         >
           <View className="d-flex flex-row items-center justify-center gap-2">
             <Plus width={20} height={20} color={Colors.white} />
@@ -150,7 +154,7 @@ export const ProductsScreen = () => {
                   <View style={styles.cellActions}>
                     <TouchableOpacity
                       style={[styles.btnAction, styles.btnEdit]}
-                      onPress={()=>handleModalAdd(item)}
+                      onPress={() => handleModalAdd(item)}
                     >
                       <SquarePen
                         width={"80%"}

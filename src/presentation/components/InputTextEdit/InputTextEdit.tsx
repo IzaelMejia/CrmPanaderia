@@ -1,18 +1,26 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { globalStyles } from "@globals/global-styles";
 import { Colors } from "@constants/Colors";
 
 interface InputTextEditProps {
   label: string;
   placeholder?: string;
+  value?: string | undefined ;
 }
 
 export const InputTextEdit: FC<InputTextEditProps> = ({
   label,
   placeholder,
+  value
 }) => {
   const [activeInput, setActiveInput] = useState(false);
+
+  useEffect(() => {
+    if (value && value.length > 0) {
+      setActiveInput(true);
+    }
+  }, [value]);
 
   return (
     <View
@@ -31,7 +39,7 @@ export const InputTextEdit: FC<InputTextEditProps> = ({
         placeholder={placeholder}
         placeholderTextColor={Colors.gray_1}
         onFocus={() => setActiveInput(true)}
-        value=""
+        value={value}
       />
 
       <Text
