@@ -10,6 +10,7 @@ export const mockProducts: Product[] = [
     price: 14,
     unidad: { id: 1, name: "Pieza" },
     image: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Concha_%28pan_dulce_mexicano%29_02.JPG",
+    descripcion: "Concha artesanal echa en horno de los años 1960. "
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ export const mockProducts: Product[] = [
     price: 3,
     unidad: { id: 1, name: "Pieza" },
     image: "https://kokomexico.com/wp-content/uploads/2021/05/BOLILLOS-770x541.jpg",
+    descripcion: "Bolillo artesanal echa en horno de los años 1960. "
   },
   {
     id: 3,

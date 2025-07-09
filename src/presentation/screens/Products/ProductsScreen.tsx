@@ -18,17 +18,24 @@ import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
 import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
 import { ModalAdd } from "@src/presentation/components/ModalAdd/ModalAdd";
 import { ModalEliminar } from "@src/presentation/components/ModalEliminar/ModalEliminar";
-import { onSetProduct } from "@src/infrastructure/store/products/productsSlice";
+import {
+  deleteProduct,
+  onSetProduct,
+} from "@src/infrastructure/store/products/productsSlice";
 import { Product } from "@src/domain/entities/product.entity";
+import { showToastSucces } from "@src/presentation/components/Toast/Toast";
 
 export const ProductsScreen = () => {
   const dispatch = useAppDispatch();
   const { products, product } = useAppSelector((state) => state.products);
+  // Modales
   const [openModalAddProduct, setOpenModalAddProduct] =
     useState<boolean>(false);
-
   const [openModalEliminar, setOpenModalEliminar] = useState<boolean>(false);
-
+  // Busqueda
+  const [query, setQuery] = useState("");
+  // Product Select.
+  const [productSelect, setIdProductSelect] = useState<Product | null>(null);
   // Paginación
   const [page, setPage] = useState<number>(0);
   const [numberOfItemsPerPageList] = useState([10, 20, 50]);
@@ -37,13 +44,8 @@ export const ProductsScreen = () => {
   );
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, products?.length);
-
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
-
+  
+  // Filtrar productos
   const filteredProducts = useMemo(() => {
     let result = products;
 
@@ -55,14 +57,28 @@ export const ProductsScreen = () => {
     return result;
   }, [products, query]);
 
+  useEffect(() => {
+    setPage(0);
+  }, [itemsPerPage]);
+
+  const openModalDelete = (item: Product | null) => {
+    setOpenModalEliminar(true);
+    setIdProductSelect(item);
+  };
+
   const handleModalAdd = (item: Product | null) => {
     if (item && item != null) {
       setOpenModalAddProduct(true);
       dispatch(onSetProduct(item));
-    }else{
-      setOpenModalAddProduct(true)
-       dispatch(onSetProduct(null));
+    } else {
+      setOpenModalAddProduct(true);
+      dispatch(onSetProduct(null));
     }
+  };
+
+  const handleDeleteProduct = () => {
+    showToastSucces(`${productSelect?.name} se elimino correctamente.`);
+    dispatch(deleteProduct(productSelect?.id));
   };
 
   return (
@@ -164,7 +180,7 @@ export const ProductsScreen = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.btnAction, styles.btnDelete]}
-                      onPress={() => setOpenModalEliminar(true)}
+                      onPress={() => openModalDelete(item)}
                     >
                       <Trash
                         width={"80%"}
@@ -177,16 +193,7 @@ export const ProductsScreen = () => {
               </DataTable.Row>
             ))}
 
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={Math.ceil(products?.length / itemsPerPage)}
-              onPageChange={(page) => setPage(page)}
-              label={`${from + 1}-${to} de ${products?.length}`}
-              numberOfItemsPerPageList={numberOfItemsPerPageList}
-              numberOfItemsPerPage={itemsPerPage}
-              onItemsPerPageChange={onItemsPerPageChange}
-              showFastPaginationControls
-            />
+            
           </DataTable>
         </ScrollView>
       </View>
@@ -199,6 +206,7 @@ export const ProductsScreen = () => {
       <ModalEliminar
         open={openModalEliminar}
         close={() => setOpenModalEliminar(false)}
+        action={handleDeleteProduct}
       />
     </View>
   );

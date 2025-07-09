@@ -41,8 +41,12 @@ export const productsSlice = createSlice({
       state.product = { ...payload };
     },
     deleteProduct: (state, { payload }) => {
+      state.products = state.products.filter((product)=>product.id !== payload);
+      if(state.product && state.product.id){
+        state.product = undefined;
+      }
     }
   },
 });
 
-export const { setLoading, setProducts, setCategories, onSetProduct } = productsSlice.actions;
+export const { setLoading, setProducts, setCategories, onSetProduct, deleteProduct } = productsSlice.actions;

@@ -67,6 +67,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
                 placeholder="Selecciona el tipo de pan"
                 label="Dulce/Salado"
                 options={BREAD_TYPES}
+                valueId={productId ? product?.tipo.id : undefined}
               />
             </View>
             <View style={styles.contentInput}>
@@ -74,6 +75,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
                 placeholder="Selecciona la categoría"
                 label="Categoría"
                 options={categoryProduct}
+                valueId={productId ? product?.Category?.id : undefined}
               />
             </View>
 

@@ -1,14 +1,21 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { FC } from "react";
+import React, { FC, use } from "react";
 import ModalOpacity from "../ModalOpacity/ModalOpacity";
 import { Colors } from "@constants/Colors";
 
 interface ModalEliminarProps {
   open: boolean;
   close: () => void;
+  action: () => void;
 }
 
-export const ModalEliminar: FC<ModalEliminarProps> = ({ open, close }) => {
+export const ModalEliminar: FC<ModalEliminarProps> = ({ open, close,  action}) => {
+  
+  const handdleAction = () => {
+    close();
+    action()
+  };
+
   return (
     <ModalOpacity open={open} close={close}>
       <View className="max-w-sm w-full bg-white py-9 px-6 justify-center items-center rounded-md">
@@ -17,7 +24,10 @@ export const ModalEliminar: FC<ModalEliminarProps> = ({ open, close }) => {
           <Text className="font-semibold">Concha?</Text>{" "}
         </Text>
         <View className="d-flex flex-col gap-4 mt-6">
-          <TouchableOpacity style={[styles.btns, styles.btnDelete]}>
+          <TouchableOpacity
+            style={[styles.btns, styles.btnDelete]}
+            onPress={handdleAction}
+          >
             <Text className="color-white">Eliminar</Text>
           </TouchableOpacity>
           <TouchableOpacity

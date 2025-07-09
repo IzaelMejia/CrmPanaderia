@@ -10,7 +10,7 @@ import {
   UIManager,
   View,
 } from "react-native";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Feather } from "lucide-react-native";
 import { globalStyles } from "@globals/global-styles";
 import { Colors } from "@constants/Colors";
@@ -20,12 +20,14 @@ interface InputSelectorProps {
   label: string;
   placeholder?: string;
   options: TypeBread[];
+  valueId?: number | undefined ;
 }
 
 export const InputSelector: FC<InputSelectorProps> = ({
   label,
   placeholder = "Ejemplo",
   options,
+  valueId
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [activeInput, setActiveInput] = useState(false);
@@ -47,12 +49,20 @@ export const InputSelector: FC<InputSelectorProps> = ({
     });
   };
 
+  useEffect(() => {
+    if (modalVisible) {
+      setActiveInput(true);
+    }else{
+      setActiveInput(false);
+    }
+  }, [modalVisible]);
+
   return (
     <View ref={containerRef} className="relative">
       <Text
         style={[
           globalStyles.txtInput,
-          activeInput ? globalStyles.txtActive : globalStyles.txtInactive,
+          (valueId || activeInput) ? globalStyles.txtActive : globalStyles.txtInactive,
         ]}
       >
         {label}
@@ -63,15 +73,21 @@ export const InputSelector: FC<InputSelectorProps> = ({
         onPress={handleOpen}
         style={[
           globalStyles.inputText,
-          activeInput
+          (valueId || activeInput)
             ? globalStyles.inputTextActive
             : globalStyles.inputTextInactive,
         ]}
         className="relative"
       >
-        <Text style={[styles.txtData, styles.txtPlaceHolcer]}>
-          {placeholder}
-        </Text>
+        {valueId ? (
+          <Text style={[styles.txtData, styles.txtReference]}>
+            {options.find(opt => opt.id === valueId)?.name ?? placeholder}
+          </Text>
+        ) : (
+          <Text style={[styles.txtData, styles.txtPlaceHolcer]}>
+            {placeholder}
+          </Text>
+        )}
         <View className="absolute right-2 top-3">
           {!modalVisible ? (
             <ChevronDown width={24} height={23} color={Colors.gray_1} />
