@@ -12,23 +12,29 @@ import React, { FC, useState } from "react";
 import { globalStyles } from "@globals/global-styles";
 import { Colors } from "@constants/Colors";
 import { InputSelector } from "../InputSelector/InputSelector";
-import { useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
+import { useAppDispatch, useAppSelector } from "@src/infrastructure/store/hooks/reduxActions";
 import { BREAD_TYPES } from "@constants/TypeBread";
 import { InputTextEdit } from "../InputTextEdit/InputTextEdit";
 import { InputImage } from "../InputImage/InputImage";
 import ModalOpacity from "../ModalOpacity/ModalOpacity";
+import { editProduct } from "@src/infrastructure/store/products/productsSlice";
+import { Product } from "@src/domain/entities/product.entity";
 
 interface ModalAddProps {
   open: boolean;
   close: () => void;
+  updateOrAddProduct:  () => void;
 }
 
-export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
-  const [selectedLanguage, setSelectedLanguage] = useState();
+export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct }) => {
+  const dispatch = useAppDispatch()
   const { categoryProduct, product } = useAppSelector(
     (state) => state.products
   );
   const productId = product?.id ? true : false;
+
+  
+
 
   return (
     <ModalOpacity open={open} close={close}>
@@ -87,7 +93,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
               />
             </View>
             <View className="w-full justify-center items-center">
-              <TouchableOpacity className="bg-primary h-14 w-60 justify-center items-center rounded-full">
+              <TouchableOpacity className="bg-primary h-14 w-60 justify-center items-center rounded-full" onPress={updateOrAddProduct}>
                 <Text className="color-white text-base font-bold">
                   {" "}
                   {productId ? "Actualizar" : "Agregar"}

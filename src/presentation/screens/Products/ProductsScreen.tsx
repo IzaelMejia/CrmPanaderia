@@ -24,10 +24,13 @@ import {
 } from "@src/infrastructure/store/products/productsSlice";
 import { Product } from "@src/domain/entities/product.entity";
 import { showToastSucces } from "@src/presentation/components/Toast/Toast";
+import { TableProducts } from "./components/TableProducts";
+import { areObjectsEqual } from "@src/presentation/helpers/areObjectsEqual";
 
 export const ProductsScreen = () => {
   const dispatch = useAppDispatch();
   const { products, product } = useAppSelector((state) => state.products);
+  const [localProduct, setLocalProduct] = useState(product);
   // Modales
   const [openModalAddProduct, setOpenModalAddProduct] =
     useState<boolean>(false);
@@ -44,7 +47,7 @@ export const ProductsScreen = () => {
   );
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, products?.length);
-  
+
   // Filtrar productos
   const filteredProducts = useMemo(() => {
     let result = products;
@@ -66,10 +69,11 @@ export const ProductsScreen = () => {
     setIdProductSelect(item);
   };
 
-  const handleModalAdd = (item: Product | null) => {
+  const handleModalAddOrEdit = (item: Product | null) => {
     if (item && item != null) {
       setOpenModalAddProduct(true);
       dispatch(onSetProduct(item));
+      setLocalProduct(item);
     } else {
       setOpenModalAddProduct(true);
       dispatch(onSetProduct(null));
@@ -79,6 +83,15 @@ export const ProductsScreen = () => {
   const handleDeleteProduct = () => {
     showToastSucces(`${productSelect?.name} se elimino correctamente.`);
     dispatch(deleteProduct(productSelect?.id));
+  };
+
+  const updateOrAddProduct = () => {
+    if (product && localProduct && !areObjectsEqual(product, localProduct)) {
+      console.log("Si son diferentes");
+    } else {
+      console.log("Son iguales");
+    }
+    // dispatch(editProduct())
   };
 
   return (
@@ -99,7 +112,7 @@ export const ProductsScreen = () => {
 
         <TouchableOpacity
           className="max-w-52 w-full bg-primary h-11, d-flex flex-row items-center justify-center rounded-md"
-          onPress={() => handleModalAdd(null)}
+          onPress={() => handleModalAddOrEdit(null)}
         >
           <View className="d-flex flex-row items-center justify-center gap-2">
             <Plus width={20} height={20} color={Colors.white} />
@@ -115,92 +128,20 @@ export const ProductsScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          <DataTable>
-            <DataTable.Header style={styles.headerTwoContent}>
-              <DataTable.Title style={col.name}>
-                <Text style={styles.txtColumnsSubtitle}>Nombre</Text>
-              </DataTable.Title>
-
-              <DataTable.Title numeric style={col.price}>
-                <Text style={styles.txtColumnsSubtitle}>Precio</Text>
-              </DataTable.Title>
-
-              <DataTable.Title style={col.type}>
-                <Text style={styles.txtColumnsSubtitle}>Tipo</Text>
-              </DataTable.Title>
-
-              <DataTable.Title style={col.cat}>
-                <Text style={styles.txtColumnsSubtitle}>Categoría</Text>
-              </DataTable.Title>
-
-              <DataTable.Title style={col.desc}>
-                <Text style={styles.txtColumnsSubtitle}>Descripción</Text>
-              </DataTable.Title>
-
-              <DataTable.Title style={col.img}>
-                <Text style={styles.txtColumnsSubtitle}>Imagen</Text>
-              </DataTable.Title>
-
-              <DataTable.Title style={col.action}>
-                <Text style={styles.txtColumnsSubtitle}>Acciones</Text>
-              </DataTable.Title>
-            </DataTable.Header>
-
-            {filteredProducts.slice(from, to).map((item) => (
-              <DataTable.Row key={item.id} style={styles.withRightBorder}>
-                <DataTable.Cell style={[col.name]}>
-                  <Text>{item.name}</Text>
-                </DataTable.Cell>
-                <DataTable.Cell numeric style={col.price}>
-                  <Text>${item.price}</Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={col.type}>
-                  <Text>{item.tipo.name}</Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={col.cat}>
-                  <Text>{item.Category?.name}</Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={col.desc}>
-                  <Text>{item.descripcion}</Text>
-                </DataTable.Cell>
-                <DataTable.Cell style={col.img}>
-                  <Image source={item.image} style={styles.img} />
-                </DataTable.Cell>
-                <DataTable.Cell style={col.action}>
-                  <View style={styles.cellActions}>
-                    <TouchableOpacity
-                      style={[styles.btnAction, styles.btnEdit]}
-                      onPress={() => handleModalAdd(item)}
-                    >
-                      <SquarePen
-                        width={"80%"}
-                        height={"80%"}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.btnAction, styles.btnDelete]}
-                      onPress={() => openModalDelete(item)}
-                    >
-                      <Trash
-                        width={"80%"}
-                        height={"80%"}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-
-            
-          </DataTable>
+          <TableProducts
+            filteredProducts={filteredProducts}
+            from={from}
+            to={to}
+            onEdit={handleModalAddOrEdit}
+            onDelete={openModalDelete}
+          />
         </ScrollView>
       </View>
 
       <ModalAdd
         open={openModalAddProduct}
         close={() => setOpenModalAddProduct(false)}
+        updateOrAddProduct={updateOrAddProduct}
       />
 
       <ModalEliminar

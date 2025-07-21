@@ -41,12 +41,29 @@ export const productsSlice = createSlice({
       state.product = { ...payload };
     },
     deleteProduct: (state, { payload }) => {
-      state.products = state.products.filter((product)=>product.id !== payload);
-      if(state.product && state.product.id){
+      state.products = state.products.filter(
+        (product) => product.id !== payload
+      );
+      if (state.product && state.product.id) {
         state.product = undefined;
       }
-    }
+    },
+    editProduct: (state, { payload }) => {
+      state.products= state.products.map(product => 
+        product.id === payload.id ? { ... product, payload }: product
+      );
+      if(state.product && state.product.id === payload.id){
+        state.product = { ...state.product , ...payload};
+      }
+    },
   },
 });
 
-export const { setLoading, setProducts, setCategories, onSetProduct, deleteProduct } = productsSlice.actions;
+export const {
+  setLoading,
+  setProducts,
+  setCategories,
+  onSetProduct,
+  deleteProduct,
+  editProduct,
+} = productsSlice.actions;
