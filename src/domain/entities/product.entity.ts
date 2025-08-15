@@ -3,15 +3,16 @@ import { CategoriesProducts } from "./categoriesProducts.entity";
 import { UnidadProduct } from "./unidadProduct.entity";
 
 export interface Product {
-  id: number;
-  name: string;
+  iD_Pan: number;
+  nombre: string;
   tipo: TypeBread;
-  price: number;
+  precio: number;
   unidad?: UnidadProduct;
   Category?: CategoriesProducts;
   descripcion?: string;
   createdAt?: string;
   updatedAt?: string;
-  image: string;
+  imagen: string;
+  activo: boolean;
 }
 

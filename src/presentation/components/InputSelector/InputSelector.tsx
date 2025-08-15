@@ -15,20 +15,26 @@ import { ChevronDown, ChevronUp, Feather } from "lucide-react-native";
 import { globalStyles } from "@globals/global-styles";
 import { Colors } from "@constants/Colors";
 import { TypeBread } from "@src/domain/entities/types-bread.entity";
+import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
 
-interface InputSelectorProps {
+interface InputSelectorProps<T> {
   label: string;
   placeholder?: string;
-  options: TypeBread[];
-  valueId?: number | undefined ;
+  options: T[];
+  valueId?: number;
+  idKey: keyof T;
+  labelKey: keyof T;
 }
 
-export const InputSelector: FC<InputSelectorProps> = ({
+export function InputSelector<T>({
   label,
   placeholder = "Ejemplo",
   options,
-  valueId
-}) => {
+  valueId,
+  idKey,
+  labelKey
+}: InputSelectorProps<T>) {
+
   const [modalVisible, setModalVisible] = useState(false);
   const [activeInput, setActiveInput] = useState(false);
   const containerRef = useRef<View | null>(null);
@@ -57,6 +63,8 @@ export const InputSelector: FC<InputSelectorProps> = ({
     }
   }, [modalVisible]);
 
+    const selectedLabel = options.find(opt => opt[idKey] === valueId)?.[labelKey] as string;
+
   return (
     <View ref={containerRef} className="relative">
       <Text
@@ -81,7 +89,7 @@ export const InputSelector: FC<InputSelectorProps> = ({
       >
         {valueId ? (
           <Text style={[styles.txtData, styles.txtReference]}>
-            {options.find(opt => opt.id === valueId)?.name ?? placeholder}
+            {selectedLabel ?? placeholder}
           </Text>
         ) : (
           <Text style={[styles.txtData, styles.txtPlaceHolcer]}>
@@ -126,7 +134,7 @@ export const InputSelector: FC<InputSelectorProps> = ({
                         //   setModalVisible(false);
                       }}
                     >
-                      <Text style={styles.optionText}>{item.name}</Text>
+                      <Text style={styles.optionText}>{String(item[labelKey])}</Text>
                     </TouchableOpacity>
                   );
                 }}

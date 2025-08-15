@@ -31,7 +31,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
   const { categoryProduct, product } = useAppSelector(
     (state) => state.products
   );
-  const productId = product?.id ? true : false;
+  const productId = product?.iD_Pan ? true : false;
 
   
 
@@ -56,7 +56,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
               <InputTextEdit
                 placeholder="Agrega el nombre del pan"
                 label="Nombre"
-                value={productId ? product?.name : undefined}
+                value={productId ? product?.nombre : undefined}
                 // value={product && 'name' in product ? (product as any).name : ''}
               />
             </View>
@@ -64,7 +64,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
               <InputTextEdit
                 placeholder="Agrega el precio del pan"
                 label="Precio"
-                value={productId ? String(product?.price) : undefined}
+                value={productId ? String(product?.precio) : undefined}
               />
             </View>
 
@@ -73,7 +73,9 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
                 placeholder="Selecciona el tipo de pan"
                 label="Dulce/Salado"
                 options={BREAD_TYPES}
-                valueId={productId ? product?.tipo.id : undefined}
+                valueId={productId ? product?.tipo.iD_TipoPan : undefined}
+                idKey="iD_TipoPan"
+                labelKey="nombre"
               />
             </View>
             <View style={styles.contentInput}>
@@ -81,7 +83,9 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
                 placeholder="Selecciona la categoría"
                 label="Categoría"
                 options={categoryProduct}
-                valueId={productId ? product?.Category?.id : undefined}
+                valueId={productId ? product?.Category?.iD_Categoria : undefined}
+                idKey="iD_Categoria"
+                labelKey="nombre"
               />
             </View>
 

@@ -37,7 +37,7 @@ export const orderSlice = createSlice({
     ) => {
       const { product, quantity = 1 } = action.payload;
       const existing = state.currentItems.find(
-        (item) => item.product.id === product.id
+        (item) => item.product.iD_Pan === product.iD_Pan
       );
       if (existing) {
         existing.quantity += quantity;
@@ -45,7 +45,7 @@ export const orderSlice = createSlice({
         if (existing.quantity <= 0) {
           //lo quitamos si llega a 0
           state.currentItems = state.currentItems.filter(
-            (item) => item.product.id != product.id
+            (item) => item.product.iD_Pan != product.iD_Pan
           );
         }
       } else if (quantity > 0) {
@@ -54,16 +54,16 @@ export const orderSlice = createSlice({
       }
       state.total = state.currentItems.reduce(
         //calculamos total de todos los productos
-        (sum, item) => sum + item.product.price * item.quantity,
+        (sum, item) => sum + item.product.precio * item.quantity,
         0
       );
     },
     removeProductFromOrder: (state, action: PayloadAction<number>) => {
       state.currentItems = state.currentItems.filter(
-        (item) => item.product.id !== action.payload
+        (item) => item.product.iD_Pan !== action.payload
       );
       state.total = state.currentItems.reduce(
-        (sum, item) => sum + item.product.price * item.quantity,
+        (sum, item) => sum + item.product.precio * item.quantity,
         0
       );
     },

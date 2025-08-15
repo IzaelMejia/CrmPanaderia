@@ -1,6 +1,6 @@
 import { TypeBread } from "@src/domain/entities/types-bread.entity";
 
 export const BREAD_TYPES: TypeBread[] = [
-  { id: 1, name: 'Dulce' },
-  { id: 2, name: 'Salado' },
+  { iD_TipoPan: 1, nombre: 'Dulce' },
+  { iD_TipoPan: 2, nombre: 'Salado' },
 ];

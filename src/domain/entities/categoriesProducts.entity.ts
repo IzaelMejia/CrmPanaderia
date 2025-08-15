@@ -1,4 +1,5 @@
 export interface CategoriesProducts {
-  id: number;
-  name: string;
+  iD_Categoria: number;
+  nombre: string;
+  descripcion?: string;
 }

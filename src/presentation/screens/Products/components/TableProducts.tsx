@@ -54,25 +54,25 @@ export const TableProducts: FC<TableProductsProps> = ({
       </DataTable.Header>
 
       {filteredProducts.slice(from, to).map((item) => (
-        <DataTable.Row key={item.id} style={styles.withRightBorder}>
+        <DataTable.Row key={item.iD_Pan} style={styles.withRightBorder}>
           <DataTable.Cell style={[col.name]}>
-            <Text>{item.name}</Text>
+            <Text>{item.nombre}</Text>
           </DataTable.Cell>
           <DataTable.Cell numeric style={col.price}>
-            <Text>${item.price}</Text>
+            <Text>${item.precio}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.type}>
-            <Text>{item.tipo.name}</Text>
+            <Text>{item.tipo.nombre}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.cat}>
-            <Text>{item.Category?.name}</Text>
+            <Text>{item.Category?.nombre}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.desc}>
             <Text>{item.descripcion}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.img}>
             <Image
-              source={item.image}
+              source={item.imagen}
               style={styles.img}
               cachePolicy={"memory-disk"}
             />

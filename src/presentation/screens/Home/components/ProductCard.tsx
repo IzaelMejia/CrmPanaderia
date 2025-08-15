@@ -34,14 +34,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <View>
       <View style={styles.imgContainer}>
         <Image
-          source={product.image}
+          source={product.imagen}
           style={styles.img}
           contentFit="cover"
           cachePolicy="memory-disk"
         />
       </View>
       <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-        {product.name}
+        {product.nombre}
       </Text>
       <View style={styles.priceCategory}>
         <Text
@@ -50,9 +50,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             { color: unit === "Pieza" ? Colors.primary : Colors.rojo },
           ]}
         >
-          ${product.price}.00
+          ${product.precio}.00
         </Text>
-        <Text style={styles.category}>{product.tipo.name}</Text>
+        <Text style={styles.category}>{product.tipo.nombre}</Text>
       </View>
     </View>
     {quantity === 0 ? (

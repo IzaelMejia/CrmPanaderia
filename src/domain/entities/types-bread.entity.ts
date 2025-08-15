@@ -1,4 +1,4 @@
 export interface TypeBread {
-  id: number;
-  name: string;
+  iD_TipoPan: number;
+  nombre: string;
 }

@@ -42,13 +42,13 @@ export const ProductCards: FC<ProductCardsProps> = ({
   );
 
   const getQuantity = (id: number) =>
-    currentItems.find((item) => item.product.id === id)?.quantity || 0;
+    currentItems.find((item) => item.product.iD_Pan === id)?.quantity || 0;
 
   const addProduct = (product: Product, qty = 1) => {
     dispatch(addProductToOrder({ product, quantity: qty }));
   };
   const handleSubtract = (product: Product) => {
-    const currentQty = getQuantity(product.id);
+    const currentQty = getQuantity(product.iD_Pan);
     if (currentQty > 0) {
       dispatch(addProductToOrder({ product, quantity: -1 }));
     }
@@ -77,13 +77,13 @@ export const ProductCards: FC<ProductCardsProps> = ({
             renderItem={({ item }) => (
               <ProductCard
                 product={item}
-                quantity={getQuantity(item.id)}
+                quantity={getQuantity(item.iD_Pan)}
                 unit={unit}
                 onAdd={(qty) => addProduct(item, qty)}
                 onSubtract={() => handleSubtract(item)}
               />
             )}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.iD_Pan.toString()}
             numColumns={numColumns}
             columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
             contentContainerStyle={{ paddingBottom: 200 }}

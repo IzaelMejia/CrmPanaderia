@@ -22,20 +22,26 @@ import {
 } from "@src/infrastructure/store/products/productsSlice";
 
 export const HomeScreen = () => {
+   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+    console.log("apiUrl", apiUrl);
   const { logged, permission, user } = useAppSelector((state) => state.auth);
   const { products, categoryProduct, isLoading } = useAppSelector(
     (state) => state.products
   );
+  console.log("products", products);
+  
   const [unit, setUnit] = useState<"Pieza" | "Bolsa">("Pieza");
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] =
     useState<CategoriesProducts | null>(null);
-
+  console.log("selectedCategory", selectedCategory);
+  
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const useCase = new GetProductsUseCase();
-    if (products.length <= 0) {
+    console.log("useCase", useCase);
+    if (products.length ) {
       dispatch(setLoading());
       useCase.execute().then((data) => {
         dispatch(setProducts(data));
@@ -58,19 +64,21 @@ export const HomeScreen = () => {
   const filteredProducts = useMemo(() => {
     let result = products;
     if (selectedCategory !== null) {
-      result = result.filter((p) => p.Category?.id === selectedCategory.id);
+      result = result.filter((p) => p.Category?.iD_Categoria === selectedCategory.iD_Categoria);
     }
-
-    if (unit) {
-      result = result.filter((p) => p.unidad?.name === unit);
-    }
+    console.log("result", result);
+    
+    // if (unit) {
+    //   result = result.filter((p) => p.unidad?.name === unit);
+    // }
     if (query.trim() !== "") {
       const lowerQuery = query.toLowerCase().trim();
-      result = result.filter((p) => p.name.toLowerCase().includes(lowerQuery));
+      result = result.filter((p) => p.nombre.toLowerCase().includes(lowerQuery));
     }
 
     return result;
   }, [products, selectedCategory, unit, query]);
+  
 
   const totalProducts = useMemo(() => {
     return filteredProducts?.length;
@@ -78,7 +86,7 @@ export const HomeScreen = () => {
 
   const nameCategory = useMemo(() => {
     if (selectedCategory === null) return "Todos";
-    return selectedCategory?.name;
+    return selectedCategory?.nombre;
   }, [filteredProducts]);
 
   return (

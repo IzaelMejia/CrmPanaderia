@@ -26,7 +26,7 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
 
     return (
       <ReanimatedSwipeable
-        onSwipeableOpen={() => dispatch(removeProductFromOrder(product.id))}
+        onSwipeableOpen={() => dispatch(removeProductFromOrder(product.iD_Pan))}
         renderRightActions={() => (
           <View style={styles.trashContainer}>
             <Trash size={24} color={Colors.white} />
@@ -51,7 +51,7 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
               style={{ width: 64, height: 64 }}
             >
               <Image
-                source={product.image}
+                source={product.imagen}
                 style={styles.img}
                 contentFit="cover"
                 cachePolicy="memory-disk"
@@ -59,15 +59,15 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
             </View>
             <View className="pl-2 gap-2" style={{ flex: 1 }}>
               <Text className="text-lg font-semibold" numberOfLines={2} ellipsizeMode="tail">
-                {product.unidad?.name} {product.name}
+                {product.unidad?.name} {product.nombre}
               </Text>
               <View className="d-flex flex-row justify-between ">
                 <View className=" w-full d-flex flex-row justify-between items-center">
                   <Text className="text-lg text-black_1 font-bold">
-                    ${product.price}.00
+                    ${product.precio}.00
                   </Text>
                   <Text className="color-rojo text-lg font-bold">
-                    ${product.price * quantity!}.00
+                    ${product.precio * quantity!}.00
                   </Text>
                 </View>
               </View>

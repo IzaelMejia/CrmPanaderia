@@ -64,7 +64,7 @@ export const DetailOrden = () => {
       <View className="d-flex flex-col justify-between flex-1 mt-4">
         <FlatList
           data={currentItems}
-          keyExtractor={(item) => item.product.id.toString()}
+          keyExtractor={(item) => item.product.iD_Pan.toString()}
           renderItem={renderItem}
           contentContainerStyle={styles.listContent}
         />

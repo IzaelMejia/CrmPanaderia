@@ -54,7 +54,7 @@ export const ProductsScreen = () => {
 
     if (query.trim() !== "") {
       const lowerQuery = query.toLowerCase().trim();
-      result = result.filter((p) => p.name.toLowerCase().includes(lowerQuery));
+      result = result.filter((p) => p.nombre.toLowerCase().includes(lowerQuery));
     }
 
     return result;
@@ -81,8 +81,8 @@ export const ProductsScreen = () => {
   };
 
   const handleDeleteProduct = () => {
-    showToastSucces(`${productSelect?.name} se elimino correctamente.`);
-    dispatch(deleteProduct(productSelect?.id));
+    showToastSucces(`${productSelect?.nombre} se elimino correctamente.`);
+    dispatch(deleteProduct(productSelect?.iD_Pan));
   };
 
   const updateOrAddProduct = () => {
