@@ -1,3 +1,4 @@
+import React, { FC, memo } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -5,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { FC } from "react";
 import { Image } from "expo-image";
 
 import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
@@ -18,6 +18,31 @@ interface CategoriesCardsProps {
   onSelect: (item: CategoriesProducts | null) => void;
 }
 
+interface CategoryCardProps {
+  label: string;
+  isSelected: boolean;
+  onPress: () => void;
+  image?: any;
+}
+
+const CategoryCard: FC<CategoryCardProps> = memo(
+  ({ label, isSelected, onPress, image = panEjemplo }) => (
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+      <Image style={styles.imgs} source={image} />
+      <View
+        style={[
+          globalStyles.containerAbsoluteOpacity,
+          isSelected && styles.cardSelected,
+        ]}
+        className="rounded-md items-center justify-center"
+      />
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>{label}</Text>
+      </View>
+    </TouchableOpacity>
+  )
+);
+
 export const CategoriesCards: FC<CategoriesCardsProps> = ({
   data,
   selectedCategory,
@@ -27,47 +52,23 @@ export const CategoriesCards: FC<CategoriesCardsProps> = ({
     <ScrollView
       contentContainerStyle={styles.containerScroll}
       horizontal
+      showsHorizontalScrollIndicator={false}
     >
-      <TouchableOpacity
-        style={[styles.cardContainer, ,]}
+      {/* Opción "Todos" */}
+      <CategoryCard
+        label="Todos"
+        isSelected={selectedCategory === null}
         onPress={() => onSelect(null)}
-      >
-        <Image
-          style={styles.imgs}
-          source={panEjemplo}
-        />
-        <View
-          style={[
-            globalStyles.containerAbsoluteOpacity,
-            selectedCategory === null && styles.cardSelected,
-          ]}
-          className="rounded-md items-center justify-center"
-        />
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Todos</Text>
-        </View>
-      </TouchableOpacity>
-      {data.map((item, index) => (
-        <TouchableOpacity
-          style={[styles.cardContainer]}
-          key={index}
+      />
+
+      {/* Categorías dinámicas */}
+      {data?.map((item) => (
+        <CategoryCard
+          key={item.iD_Categoria}
+          label={item.nombre}
+          isSelected={selectedCategory?.iD_Categoria === item.iD_Categoria}
           onPress={() => onSelect(item)}
-        >
-          <Image
-            style={styles.imgs}
-            source={panEjemplo}
-          />
-          <View
-            style={[
-              globalStyles.containerAbsoluteOpacity,
-              selectedCategory?.id === item.id && styles.cardSelected,
-            ]}
-            className="rounded-md items-center justify-center"
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{item.name}</Text>
-          </View>
-        </TouchableOpacity>
+        />
       ))}
     </ScrollView>
   );
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     position: "relative",
     zIndex: 1,
+    overflow: "hidden", // evita que la imagen se salga de bordes redondeados
   },
   cardSelected: {
     backgroundColor: "red",
@@ -92,7 +94,6 @@ const styles = StyleSheet.create({
   imgs: {
     width: "100%",
     height: "100%",
-    borderRadius: 6,
   },
   textContainer: {
     ...StyleSheet.absoluteFillObject,

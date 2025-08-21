@@ -3,16 +3,16 @@ import { CategoriesProductsRepository } from "@src/domain/repository/categories.
 
 export const mockSubCagories: CategoriesProducts[] = [
   {
-    id: 1,
-    name: "Pan de dulce",
+    iD_Categoria: 1,
+    nombre: "Pan de dulce",
   },
   {
-    id: 2,
-    name: "Pan salado",
+    iD_Categoria: 2,
+    nombre: "Pan salado",
   },
   {
-    id: 3,
-    name: "Cocoles",
+    iD_Categoria: 3,
+    nombre: "Cocoles",
   },
 ];
 

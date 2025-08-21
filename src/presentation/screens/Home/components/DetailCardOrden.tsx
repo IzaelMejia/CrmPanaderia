@@ -19,7 +19,7 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
   ({ item }) => {
     const dispatch = useAppDispatch();
     const { product, quantity } = item;
-    const isPieza = product.unidad?.name === "Pieza";
+    const isPieza = product.unidad?.nombre === "Pieza";
     const addProduct = (product: Product, qty = 1) => {
       dispatch(addProductToOrder({ product, quantity: qty }));
     };
@@ -59,14 +59,14 @@ export const DetailCardOrden: FC<DetailCardOrdenProps> = React.memo(
             </View>
             <View className="pl-2 gap-2" style={{ flex: 1 }}>
               <Text className="text-lg font-semibold" numberOfLines={2} ellipsizeMode="tail">
-                {product.unidad?.name} {product.nombre}
+                {product.unidad?.nombre} {product.nombre}
               </Text>
               <View className="d-flex flex-row justify-between ">
                 <View className=" w-full d-flex flex-row justify-between items-center">
                   <Text className="text-lg text-black_1 font-bold">
                     ${product.precio}.00
                   </Text>
-                  <Text className="color-rojo text-lg font-bold">
+                  <Text className="text-lg font-bold" style={{color: isPieza ? Colors.primary : Colors.rojo}}>
                     ${product.precio * quantity!}.00
                   </Text>
                 </View>

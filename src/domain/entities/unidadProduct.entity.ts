@@ -1,4 +1,4 @@
 export interface UnidadProduct {
-  id: number;
-  name: string;
+  iD_Unidad: number;
+  nombre: string;
 }

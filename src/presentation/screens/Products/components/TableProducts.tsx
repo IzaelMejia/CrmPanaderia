@@ -65,7 +65,7 @@ export const TableProducts: FC<TableProductsProps> = ({
             <Text>{item.tipo.nombre}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.cat}>
-            <Text>{item.Category?.nombre}</Text>
+            <Text>{item.categoria?.nombre}</Text>
           </DataTable.Cell>
           <DataTable.Cell style={col.desc}>
             <Text>{item.descripcion}</Text>

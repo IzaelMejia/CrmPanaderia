@@ -23,10 +23,10 @@ export const DetailOrden = () => {
   const dispatch = useAppDispatch();
   const { currentItems, total } = useAppSelector((state) => state.orders);
   const totalProductosPiezas = currentItems
-    .filter((item) => item.product.unidad?.id === 1)
+    .filter((item) => item.product.unidad?.iD_Unidad === 1)
     .reduce((acc, item) => acc + item.quantity, 0);
   const totalProductosBolsas = currentItems
-    .filter((item) => item.product.unidad?.id === 2)
+    .filter((item) => item.product.unidad?.iD_Unidad === 2)
     .reduce((acc, item) => acc + item.quantity, 0);
 
   const renderItem = ({

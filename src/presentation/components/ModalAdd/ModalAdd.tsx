@@ -83,7 +83,7 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close, updateOrAddProduct })
                 placeholder="Selecciona la categoría"
                 label="Categoría"
                 options={categoryProduct}
-                valueId={productId ? product?.Category?.iD_Categoria : undefined}
+                valueId={productId ? product?.categoria?.iD_Categoria : undefined}
                 idKey="iD_Categoria"
                 labelKey="nombre"
               />

@@ -8,7 +8,7 @@ export interface Product {
   tipo: TypeBread;
   precio: number;
   unidad?: UnidadProduct;
-  Category?: CategoriesProducts;
+  categoria?: CategoriesProducts;
   descripcion?: string;
   createdAt?: string;
   updatedAt?: string;

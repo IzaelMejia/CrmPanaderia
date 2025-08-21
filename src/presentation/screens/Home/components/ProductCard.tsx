@@ -1,10 +1,11 @@
 // ProductCard.tsx
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Minus, Plus } from "lucide-react-native";
 import { Colors } from "@constants/Colors";
 import { Product } from "@src/domain/entities/product.entity";
 import { Image } from "expo-image";
+import noFoto from "@assets/images/no-foto.png";
 
 interface ProductCardProps {
   product: Product;
@@ -20,94 +21,99 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   unit,
   onAdd,
   onSubtract,
-}) => (
-  <View
-    style={[
-      styles.cardContainer,
-      quantity
-        ? unit === "Pieza"
-          ? styles.borderActive
-          : styles.borderActiveRed
-        : undefined,
-    ]}
-  >
-    <View>
-      <View style={styles.imgContainer}>
-        <Image
-          source={product.imagen}
-          style={styles.img}
-          contentFit="cover"
-          cachePolicy="memory-disk"
-        />
-      </View>
-      <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-        {product.nombre}
-      </Text>
-      <View style={styles.priceCategory}>
-        <Text
-          style={[
-            styles.price,
-            { color: unit === "Pieza" ? Colors.primary : Colors.rojo },
-          ]}
-        >
-          ${product.precio}.00
+}) => {
+  const [error, setError] = useState(false);
+  return (
+    <View
+      style={[
+        styles.cardContainer,
+        quantity
+          ? unit === "Pieza"
+            ? styles.borderActive
+            : styles.borderActiveRed
+          : undefined,
+      ]}
+    >
+      <View>
+        <View style={styles.imgContainer}>
+          <Image
+             source={error || !product.imagen ? noFoto : { uri: product.imagen }}
+            style={[styles.img, error && styles.noImage]}
+            // contentFit="cover"
+            cachePolicy="memory-disk"
+            onError={() => setError(true)}
+          />
+        </View>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+          {product.nombre}
         </Text>
-        <Text style={styles.category}>{product.tipo.nombre}</Text>
-      </View>
-    </View>
-    {quantity === 0 ? (
-      <TouchableOpacity
-        style={[
-          styles.btnAgregar,
-          {
-            backgroundColor: unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
-          },
-        ]}
-        onPress={() => onAdd(1)}
-      >
-        <Text style={styles.textAgregar}>Agregar</Text>
-      </TouchableOpacity>
-    ) : (
-      <View
-        style={[
-          styles.btnAgregar,
-          {
-            backgroundColor: unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
-          },
-        ]}
-      >
-        <View style={styles.contentIncrement}>
-          <TouchableOpacity
+        <View style={styles.priceCategory}>
+          <Text
             style={[
-              styles.btnIncremet,
-              {
-                backgroundColor:
-                  unit === "Pieza" ? Colors.primary : Colors.rojo,
-              },
+              styles.price,
+              { color: unit === "Pieza" ? Colors.primary : Colors.rojo },
             ]}
-            onPress={onSubtract}
           >
-            <Minus size={14} color={Colors.white} />
-          </TouchableOpacity>
-          <Text style={styles.textIncremet}>{quantity}</Text>
-          <TouchableOpacity
-            style={[
-              styles.btnIncremet,
-              {
-                backgroundColor:
-                  unit === "Pieza" ? Colors.primary : Colors.rojo,
-              },
-            ]}
-            onPress={() => onAdd(1)}
-          >
-            <Plus size={14} color={Colors.white} />
-          </TouchableOpacity>
+            ${product.precio}.00
+          </Text>
+          <Text style={styles.category}>{product.tipo.nombre}</Text>
         </View>
       </View>
-    )}
-  </View>
-);
-
+      {quantity === 0 ? (
+        <TouchableOpacity
+          style={[
+            styles.btnAgregar,
+            {
+              backgroundColor:
+                unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
+            },
+          ]}
+          onPress={() => onAdd(1)}
+        >
+          <Text style={styles.textAgregar}>Agregar</Text>
+        </TouchableOpacity>
+      ) : (
+        <View
+          style={[
+            styles.btnAgregar,
+            {
+              backgroundColor:
+                unit === "Pieza" ? Colors.green_2 : Colors.rojo_2,
+            },
+          ]}
+        >
+          <View style={styles.contentIncrement}>
+            <TouchableOpacity
+              style={[
+                styles.btnIncremet,
+                {
+                  backgroundColor:
+                    unit === "Pieza" ? Colors.primary : Colors.rojo,
+                },
+              ]}
+              onPress={onSubtract}
+            >
+              <Minus size={14} color={Colors.white} />
+            </TouchableOpacity>
+            <Text style={styles.textIncremet}>{quantity}</Text>
+            <TouchableOpacity
+              style={[
+                styles.btnIncremet,
+                {
+                  backgroundColor:
+                    unit === "Pieza" ? Colors.primary : Colors.rojo,
+                },
+              ]}
+              onPress={() => onAdd(1)}
+            >
+              <Plus size={14} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+};
 const styles = StyleSheet.create({
   cardContainer: {
     width: 176,
@@ -131,14 +137,23 @@ const styles = StyleSheet.create({
   imgContainer: {
     width: "100%",
     height: 104,
-    backgroundColor: Colors.gray_1,
     borderRadius: 6,
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: Colors.gray_1,
+    borderWidth: 1,
   },
   img: {
     width: "100%",
     height: "100%",
     borderRadius: 6,
+  },
+  noImage:{
+    width: "90%",
+    height: "95%",
+    alignSelf: "center",
+    objectFit:"contain",
   },
   title: {
     fontSize: 16,
