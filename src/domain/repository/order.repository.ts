@@ -1,5 +1,6 @@
+import { CreateOrderDTO, CreateOrderResponse } from "@src/application/dtos/create-order.dto";
 import { Order } from "../entities/order.entity";
 
 export interface OrderRepository {
-  createOrder(order: Order): Promise<Order>;
+  createOrder(order: CreateOrderDTO): Promise<CreateOrderResponse>;
 }

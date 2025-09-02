@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   ListRenderItemInfo,
   StyleSheet,
@@ -18,8 +19,14 @@ import { Product } from "@src/domain/entities/product.entity";
 import { BrushCleaning } from "lucide-react-native";
 import { Colors } from "@constants/Colors";
 import { cleanOrder } from "@src/infrastructure/store/Order/OrderSlice";
+import { GenerateOrderUseCase } from "@src/application/use-cases/generate-order-use-case";
+import {
+  showError,
+  showToastSucces,
+} from "@src/presentation/components/Toast/Toast";
 
 export const DetailOrden = () => {
+  const useCase = new GenerateOrderUseCase();
   const dispatch = useAppDispatch();
   const { currentItems, total } = useAppSelector((state) => state.orders);
   const totalProductosPiezas = currentItems
@@ -29,6 +36,8 @@ export const DetailOrden = () => {
     .filter((item) => item.product.unidad?.iD_Unidad === 2)
     .reduce((acc, item) => acc + item.quantity, 0);
 
+  console.log("currentItems:", currentItems);
+
   const renderItem = ({
     item,
   }: ListRenderItemInfo<{ product: Product; quantity?: number }>) => (
@@ -37,6 +46,59 @@ export const DetailOrden = () => {
 
   const CleanOrder = () => {
     dispatch(cleanOrder());
+  };
+
+  type DetalleDTO = {
+    iD_Pan: number;
+    cantidad: number;
+    precioUnitario: number;
+  };
+
+  type CrearVentaDTO = {
+    iD_Usuario: number;
+    formaPago: "contado" | "credito";
+    detalles: DetalleDTO[];
+  };
+
+  const buildOrderPayload = (
+    userId: number,
+    formaPago: "contado" | "credito",
+    currentItems: { product: Product; quantity: number }[]
+  ): CrearVentaDTO => {
+    const detalles: DetalleDTO[] = currentItems.map(
+      ({ product, quantity }) => ({
+        iD_Pan: product.iD_Pan,
+        cantidad: quantity,
+        precioUnitario: product.precio,
+      })
+    );
+
+    return {
+      iD_Usuario: userId,
+      formaPago,
+      detalles,
+    };
+  };
+
+  const sendOrder = async () => {
+    if (!currentItems.length) {
+      Alert.alert("Tu carrito está vacío");
+      return;
+    }
+
+    const payload = buildOrderPayload(
+      1, // iD_Usuario (pon aquí el real del auth)
+      "contado", // o "credito", según selección del UI
+      currentItems
+    );
+    const res = await useCase.execute(payload);
+    if (res.statusCode === 201) {
+      console.log("sendOrder payload", res);
+      CleanOrder();
+      showToastSucces(`Se ha generado la venta con éxito.`);
+    } else {
+      showError(`Error al generar la venta.`);
+    }
   };
 
   return (
@@ -78,7 +140,10 @@ export const DetailOrden = () => {
             </Text>
           </View>
 
-          <TouchableOpacity className="bg-primary h-11 items-center justify-center mt-6 rounded-md">
+          <TouchableOpacity
+            className="bg-primary h-11 items-center justify-center mt-6 rounded-md"
+            onPress={sendOrder}
+          >
             <Text className="text-base font-semibold color-white ">
               Finalizar orden
             </Text>
