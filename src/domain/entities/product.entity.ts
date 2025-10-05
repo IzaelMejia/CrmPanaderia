@@ -12,7 +12,7 @@ export interface Product {
   descripcion?: string;
   createdAt?: string;
   updatedAt?: string;
-  imagen: string;
+  imagen?: string;
   activo: boolean;
 }
 

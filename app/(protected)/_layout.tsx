@@ -70,16 +70,6 @@ export default function _layout() {
             ),
           }}
         />
-        <Drawer.Screen
-          name="pedidos"
-          options={{
-            drawerLabel: "Pedidos",
-            title: "Pedidos",
-            drawerIcon: ({ size, color }) => (
-              <NotepadText color={color} size={size} />
-            ),
-          }}
-        />
 
         <Drawer.Protected guard={user?.roleId === 0}>
           <Drawer.Screen

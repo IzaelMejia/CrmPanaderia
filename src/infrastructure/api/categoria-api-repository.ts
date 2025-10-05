@@ -10,7 +10,7 @@ export class CategoryApiRepository implements CategoriesProductsRepository {
     try {
       const data =
         await localApiClient.get<CategoriesProducts[]>("/api/categorias");
-      console.log("getCategoriesProducts API:", data);
+      // console.log("getCategoriesProducts API:", data);
       return data;
     } catch (error: any) {
       console.error("❌ Error getCategoriesProducts:", error.message);

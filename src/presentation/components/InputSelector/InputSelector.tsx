@@ -24,17 +24,20 @@ interface InputSelectorProps<T> {
   valueId?: number;
   idKey: keyof T;
   labelKey: keyof T;
+  onValueChange: (value: number) => void;
+  error?: string;
 }
 
 export function InputSelector<T>({
   label,
   placeholder = "Ejemplo",
-  options,
+  options = [],
   valueId,
   idKey,
-  labelKey
+  labelKey,
+  onValueChange,
+  error,
 }: InputSelectorProps<T>) {
-
   const [modalVisible, setModalVisible] = useState(false);
   const [activeInput, setActiveInput] = useState(false);
   const containerRef = useRef<View | null>(null);
@@ -58,19 +61,23 @@ export function InputSelector<T>({
   useEffect(() => {
     if (modalVisible) {
       setActiveInput(true);
-    }else{
+    } else {
       setActiveInput(false);
     }
   }, [modalVisible]);
 
-    const selectedLabel = options.find(opt => opt[idKey] === valueId)?.[labelKey] as string;
+  const selectedLabel = options.find((opt) => opt[idKey] === valueId)?.[
+    labelKey
+  ] as string;
 
   return (
     <View ref={containerRef} className="relative">
       <Text
         style={[
           globalStyles.txtInput,
-          (valueId || activeInput) ? globalStyles.txtActive : globalStyles.txtInactive,
+          valueId || activeInput
+            ? globalStyles.txtActive
+            : globalStyles.txtInactive,
         ]}
       >
         {label}
@@ -81,7 +88,7 @@ export function InputSelector<T>({
         onPress={handleOpen}
         style={[
           globalStyles.inputText,
-          (valueId || activeInput)
+          valueId || activeInput
             ? globalStyles.inputTextActive
             : globalStyles.inputTextInactive,
         ]}
@@ -110,6 +117,7 @@ export function InputSelector<T>({
         transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
+        supportedOrientations={["landscape-left", "landscape-right"]}
       >
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={{ flex: 1 }}>
@@ -120,21 +128,25 @@ export function InputSelector<T>({
                   top: position.y + position.height,
                   left: position.x,
                   width: position.width,
+                  maxHeight: 220,
                 },
               ]}
             >
               <FlatList
                 data={options}
                 renderItem={({ item }) => {
+                  const idNum = Number(item[idKey] as unknown);
                   return (
                     <TouchableOpacity
                       style={styles.option}
                       onPress={() => {
-                        //   onValueChange(item.value);
-                        //   setModalVisible(false);
+                        onValueChange(idNum);
+                        setModalVisible(false);
                       }}
                     >
-                      <Text style={styles.optionText}>{String(item[labelKey])}</Text>
+                      <Text style={styles.optionText}>
+                        {String(item[labelKey])}
+                      </Text>
                     </TouchableOpacity>
                   );
                 }}
@@ -145,7 +157,7 @@ export function InputSelector<T>({
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   label: {

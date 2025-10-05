@@ -21,6 +21,7 @@ const ModalOpacity: FC<ModalOpacityProps> = ({ open, close, children }) => {
       transparent={true}
       visible={open}
       onRequestClose={close}
+      supportedOrientations={["landscape-left", "landscape-right"]}
     >
       <TouchableWithoutFeedback onPress={close}>
         <View style={[globalStyles.opacityScreen, styles.centerContent]}>

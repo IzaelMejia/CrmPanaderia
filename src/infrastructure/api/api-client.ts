@@ -47,6 +47,25 @@ export class ApiClient {
     });
   }
 
+  put<T>(
+    path: string,
+    body: any,
+    headers: Record<string, string> = {}
+  ): Promise<T> {
+    return this.request<T>(path, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...headers },
+      data: body,
+    });
+  }
+
+  delete<T>(path: string, headers: Record<string, string> = {}): Promise<T> {
+    return this.request<T>(path, {
+      method: "DELETE",
+      headers,
+    });
+  }
+
   // Método para manejar errores
   private handleError(error: AxiosError): void {
     if (axios.isAxiosError(error)) {

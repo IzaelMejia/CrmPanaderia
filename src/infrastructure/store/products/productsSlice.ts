@@ -50,7 +50,7 @@ export const productsSlice = createSlice({
     },
     editProduct: (state, { payload }) => {
       state.products= state.products.map(product => 
-        product.iD_Pan === payload.iD_Pan ? { ... product, payload}: product
+        product.iD_Pan === payload.iD_Pan ? { ... product, ...payload}: product
       );
       if(state.product && state.product.iD_Pan === payload.iD_Pan){
         state.product = { ...state.product , ...payload};

@@ -66,7 +66,7 @@ export const ProductCards: FC<ProductCardsProps> = ({
               />
             )}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={numColumns}
+            numColumns={3}
             columnWrapperStyle={styles.row}
             contentContainerStyle={{ padding: 8, paddingBottom: 200 }}
             showsVerticalScrollIndicator={false}
@@ -84,8 +84,9 @@ export const ProductCards: FC<ProductCardsProps> = ({
               />
             )}
             keyExtractor={(item) => item.iD_Pan.toString()}
-            numColumns={numColumns}
-            columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+            numColumns={3}
+            // columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+            columnWrapperStyle={styles.row}
             contentContainerStyle={{ paddingBottom: 200 }}
             showsVerticalScrollIndicator={false}
           />

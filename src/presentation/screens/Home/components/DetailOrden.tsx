@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -24,19 +24,19 @@ import {
   showError,
   showToastSucces,
 } from "@src/presentation/components/Toast/Toast";
+import { ModalConfirm } from "../modal/ModalConfirm";
 
 export const DetailOrden = () => {
   const useCase = new GenerateOrderUseCase();
   const dispatch = useAppDispatch();
   const { currentItems, total } = useAppSelector((state) => state.orders);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const totalProductosPiezas = currentItems
     .filter((item) => item.product.unidad?.iD_Unidad === 1)
     .reduce((acc, item) => acc + item.quantity, 0);
   const totalProductosBolsas = currentItems
     .filter((item) => item.product.unidad?.iD_Unidad === 2)
     .reduce((acc, item) => acc + item.quantity, 0);
-
-  console.log("currentItems:", currentItems);
 
   const renderItem = ({
     item,
@@ -80,7 +80,7 @@ export const DetailOrden = () => {
     };
   };
 
-  const sendOrder = async () => {
+  const sendOrder = async (method: "contado" | "credito") => {
     if (!currentItems.length) {
       Alert.alert("Tu carrito está vacío");
       return;
@@ -88,9 +88,11 @@ export const DetailOrden = () => {
 
     const payload = buildOrderPayload(
       1, // iD_Usuario (pon aquí el real del auth)
-      "contado", // o "credito", según selección del UI
+      method, // o "credito", según selección del UI
       currentItems
     );
+    console.log("payload", payload);
+
     const res = await useCase.execute(payload);
     if (res.statusCode === 201) {
       console.log("sendOrder payload", res);
@@ -105,9 +107,13 @@ export const DetailOrden = () => {
     <GestureHandlerRootView>
       <View className="border-b-hairline border-b-gray-500 flex flex-row justify-between items-center">
         <Text className="text-lg font-medium">Detalles de la Orden</Text>
-        <TouchableOpacity onPress={CleanOrder}>
-          <BrushCleaning width={22} height={22} color={Colors.rojo} />
-        </TouchableOpacity>
+
+        <View className="d-flex flex-row items-center gap-1 border-2 border-red-500 px-2 py-1 rounded-md">
+          <TouchableOpacity onPress={CleanOrder}>
+            <BrushCleaning width={22} height={22} color={Colors.rojo} />
+          </TouchableOpacity>
+          <Text>Limpiar</Text>
+        </View>
       </View>
       <View className="d-flex gap-1 mt-3 flex-row justify-between">
         <Text className="text-base">
@@ -142,7 +148,10 @@ export const DetailOrden = () => {
 
           <TouchableOpacity
             className="bg-primary h-11 items-center justify-center mt-6 rounded-md"
-            onPress={sendOrder}
+            // onPress={sendOrder}
+            onPress={() => setOpenConfirm(true)}
+            disabled={!currentItems.length}
+            style={{ opacity: !currentItems.length ? 0.5 : 1 }}
           >
             <Text className="text-base font-semibold color-white ">
               Finalizar orden
@@ -150,6 +159,14 @@ export const DetailOrden = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ModalConfirm
+        open={openConfirm}
+        close={() => setOpenConfirm(false)}
+        message="¿Deseas finalizar la orden?"
+        onConfirm={(method) => {
+          sendOrder(method);
+        }}
+      />
     </GestureHandlerRootView>
   );
 };

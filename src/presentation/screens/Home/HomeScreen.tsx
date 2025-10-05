@@ -36,15 +36,14 @@ export const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(products.length === 0 ){
-      const useCase = new GetProductsUseCase();
-      dispatch(setLoading());
-      useCase.execute().then((data) => {
-        dispatch(setProducts(data));
-      });
-    }
+    const useCase = new GetProductsUseCase();
+    dispatch(setLoading());
+    useCase.execute().then((data) => {
+      dispatch(setProducts(data));
+    });
   }, [logged]);
 
+  // Agregar categorias
   useEffect(() => {
     const useCase = new GetCategoriesProducts();
     useCase.execute().then((data) => {
@@ -77,9 +76,6 @@ export const HomeScreen = () => {
 
     return result;
   }, [products, selectedCategory, unit, query]);
-
-  console.log("filteredProducts", filteredProducts);
-  
 
   const totalProducts = useMemo(() => {
     return filteredProducts?.length;

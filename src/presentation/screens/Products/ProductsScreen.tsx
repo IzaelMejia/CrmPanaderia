@@ -16,20 +16,26 @@ import { Image } from "expo-image";
 import { Plus, SquarePen, Trash } from "lucide-react-native";
 import TouchDrawer from "@src/presentation/components/TouchDrawer/TouchDrawer";
 import { InputSearch } from "@src/presentation/components/InputSearch/InputSearch";
-import { ModalAdd } from "@src/presentation/components/ModalAdd/ModalAdd";
+import { ModalAdd } from "@src/presentation/screens/Products/modales/ModalAdd";
 import { ModalEliminar } from "@src/presentation/components/ModalEliminar/ModalEliminar";
 import {
   deleteProduct,
   onSetProduct,
+  setCategories,
 } from "@src/infrastructure/store/products/productsSlice";
 import { Product } from "@src/domain/entities/product.entity";
 import { showToastSucces } from "@src/presentation/components/Toast/Toast";
 import { TableProducts } from "./components/TableProducts";
 import { areObjectsEqual } from "@src/presentation/helpers/areObjectsEqual";
+import { GetCategoriesProducts } from "@src/application/use-cases/categories-products-use-case";
+import { GetProductsUseCase } from "@src/application/use-cases/get-products.use-case";
 
 export const ProductsScreen = () => {
   const dispatch = useAppDispatch();
-  const { products, product } = useAppSelector((state) => state.products);
+  const useCaseProduct = new GetProductsUseCase();
+  const { products, product, categoryProduct } = useAppSelector(
+    (state) => state.products
+  );
   const [localProduct, setLocalProduct] = useState(product);
   // Modales
   const [openModalAddProduct, setOpenModalAddProduct] =
@@ -48,13 +54,24 @@ export const ProductsScreen = () => {
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, products?.length);
 
+  // Agregar categorias
+  useEffect(() => {
+    const useCase = new GetCategoriesProducts();
+    useCase.execute().then((data) => {
+      // setCategories(data);
+      dispatch(setCategories(data));
+    });
+  }, []);
+
   // Filtrar productos
   const filteredProducts = useMemo(() => {
     let result = products;
 
     if (query.trim() !== "") {
       const lowerQuery = query.toLowerCase().trim();
-      result = result.filter((p) => p.nombre.toLowerCase().includes(lowerQuery));
+      result = result.filter((p) =>
+        p.nombre.toLowerCase().includes(lowerQuery)
+      );
     }
 
     return result;
@@ -80,18 +97,12 @@ export const ProductsScreen = () => {
     }
   };
 
-  const handleDeleteProduct = () => {
-    showToastSucces(`${productSelect?.nombre} se elimino correctamente.`);
-    dispatch(deleteProduct(productSelect?.iD_Pan));
-  };
-
-  const updateOrAddProduct = () => {
-    if (product && localProduct && !areObjectsEqual(product, localProduct)) {
-      console.log("Si son diferentes");
-    } else {
-      console.log("Son iguales");
+  const handleDeleteProduct = async () => {
+    if (productSelect) {
+      await useCaseProduct.deleteProduct(productSelect.iD_Pan);
+      showToastSucces(`${productSelect?.nombre} se elimino correctamente.`);
+      dispatch(deleteProduct(productSelect?.iD_Pan));
     }
-    // dispatch(editProduct())
   };
 
   return (
@@ -141,7 +152,6 @@ export const ProductsScreen = () => {
       <ModalAdd
         open={openModalAddProduct}
         close={() => setOpenModalAddProduct(false)}
-        updateOrAddProduct={updateOrAddProduct}
       />
 
       <ModalEliminar
