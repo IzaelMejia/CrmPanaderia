@@ -49,7 +49,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 
 export default function _layout() {
   const { user } = useAppSelector((state) => state.auth);
-
+  console.log("user", user);
+  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -71,7 +72,7 @@ export default function _layout() {
           }}
         />
 
-        <Drawer.Protected guard={user?.roleId === 0}>
+        <Drawer.Protected guard={user?.Rol.iD_Rol === 1}>
           <Drawer.Screen
             name="productos"
             options={{

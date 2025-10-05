@@ -16,32 +16,32 @@ const mockPermissions: Permission[] = [
   },
 ];
 
-const mockUser: User & { PermisosPerfil: Permission[] } = {
-  id: 1,
-  name: "Mock User",
-  email: "mock@example.com",
-  username: "mockuser",
-  roleId: 1,
-  roleName: "Administrator",
-  token: "mock-token",
-  PermisosPerfil: mockPermissions,
-};
+// const mockUser: User & { PermisosPerfil: Permission[] } = {
+//   ID_Usuario: 1,
+//   name: "Mock User",
+//   email: "mock@example.com",
+//   username: "mockuser",
+//   roleId: 1,
+//   roleName: "Administrator",
+//   token: "mock-token",
+//   PermisosPerfil: mockPermissions,
+// };
 
-export class MockAuthRepository implements AuthRepository {
-  async login(email: string, password: string): Promise<User> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log("mockUser", mockUser);
-        resolve({ ...mockUser, email });
+// export class MockAuthRepository implements AuthRepository {
+//   async login(email: string, password: string): Promise<User> {
+//     return new Promise((resolve) => {
+//       setTimeout(() => {
+//         console.log("mockUser", mockUser);
+//         resolve({ ...mockUser, email });
         
-      }, 500);
-    });
-  }
+//       }, 500);
+//     });
+//   }
 
-  async logout(): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(), 300);
-    });
-  }
+//   async logout(): Promise<void> {
+//     return new Promise((resolve) => {
+//       setTimeout(() => resolve(), 300);
+//     });
+//   }
 
-}
+// }

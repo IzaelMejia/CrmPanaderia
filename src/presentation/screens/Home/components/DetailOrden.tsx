@@ -29,6 +29,7 @@ import { ModalConfirm } from "../modal/ModalConfirm";
 export const DetailOrden = () => {
   const useCase = new GenerateOrderUseCase();
   const dispatch = useAppDispatch();
+    const { user } = useAppSelector((state) => state.auth);
   const { currentItems, total } = useAppSelector((state) => state.orders);
   const [openConfirm, setOpenConfirm] = useState(false);
   const totalProductosPiezas = currentItems
@@ -87,12 +88,10 @@ export const DetailOrden = () => {
     }
 
     const payload = buildOrderPayload(
-      1, // iD_Usuario (pon aquí el real del auth)
+      user?.ID_Usuario ?? 0, // iD_Usuario (pon aquí el real del auth)
       method, // o "credito", según selección del UI
       currentItems
     );
-    console.log("payload", payload);
-
     const res = await useCase.execute(payload);
     if (res.statusCode === 201) {
       console.log("sendOrder payload", res);
@@ -105,14 +104,14 @@ export const DetailOrden = () => {
 
   return (
     <GestureHandlerRootView>
-      <View className="border-b-hairline border-b-gray-500 flex flex-row justify-between items-center">
+      <View className="border-b-hairline border-b-gray-500 flex flex-row justify-between items-center pb-2">
         <Text className="text-lg font-medium">Detalles de la Orden</Text>
 
-        <View className="d-flex flex-row items-center gap-1 border-2 border-red-500 px-2 py-1 rounded-md">
-          <TouchableOpacity onPress={CleanOrder}>
+        <View className="d-flex flex-row items-center gap-1 border-2 border-red-500 px-2 py-1 rounded-md ">
+          <TouchableOpacity onPress={CleanOrder} className="d-flex flex-row items-center gap-1">
             <BrushCleaning width={22} height={22} color={Colors.rojo} />
+            <Text>Limpiar</Text>
           </TouchableOpacity>
-          <Text>Limpiar</Text>
         </View>
       </View>
       <View className="d-flex gap-1 mt-3 flex-row justify-between">

@@ -158,6 +158,7 @@ export const ProductsScreen = () => {
         open={openModalEliminar}
         close={() => setOpenModalEliminar(false)}
         action={handleDeleteProduct}
+        dataNombre={productSelect?.nombre}
       />
     </View>
   );

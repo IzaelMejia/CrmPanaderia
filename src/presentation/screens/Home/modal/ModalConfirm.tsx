@@ -21,7 +21,6 @@ export const ModalConfirm: FC<ModalConfirmProps> = ({
   onConfirm,
 }) => {
   const [formaPago, setFormaPago] = useState<MetodoPago>(initialMethod);
-
   // si el padre cambia el initialMethod mientras el modal está abierto
   useEffect(() => {
     setFormaPago(initialMethod);

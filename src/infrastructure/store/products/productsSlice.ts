@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "@src/domain/entities/product.entity";
 import { CategoriesProducts } from "@src/domain/entities/categoriesProducts.entity";
 import { TypeBread } from "@src/domain/entities/types-bread.entity";
@@ -48,12 +48,18 @@ export const productsSlice = createSlice({
         state.product = undefined;
       }
     },
-    editProduct: (state, { payload }) => {
-      state.products= state.products.map(product => 
-        product.iD_Pan === payload.iD_Pan ? { ... product, ...payload}: product
-      );
-      if(state.product && state.product.iD_Pan === payload.iD_Pan){
-        state.product = { ...state.product , ...payload};
+    editProduct: (state, { payload }: PayloadAction<Product>) => {
+      if (payload?.iD_Pan == null) return;
+      const idx = state.products.findIndex((p) => p.iD_Pan === payload.iD_Pan);
+      if (idx >= 0) {
+        state.products[idx] = { ...state.products[idx], ...payload };
+      } else {
+        // No existe → agregar al inicio
+        state.products.unshift(payload);
+      }
+      // Sincronizar el seleccionado si coincide
+      if (state.product?.iD_Pan === payload.iD_Pan) {
+        state.product = { ...state.product, ...payload };
       }
     },
   },

@@ -87,11 +87,11 @@ export const ModalAdd: FC<ModalAddProps> = ({ open, close }) => {
         iD_Unidad: data.iD_Unidad,
         Imagen: "string",
       };
-      console.log("payload", payload);
 
       const created = await useCaseProduct.createProduct(payload as any);
+      dispatch(editProduct(created));
       showToastSucces(
-        `Se ${productId ? "actualizó" : "creó"} ${created.nombre} con éxito`
+        `Se ${productId ? "actualizó" : "creó"} ${created?.nombre} con éxito`
       );
       close();
     } catch (e: any) {
